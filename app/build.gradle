@@ -1,0 +1,143 @@
+/*
+ ********************************************************************
+ * Licensed Materials - Property of IBM                             *
+ *                                                                  *
+ * Copyright IBM Corp. 2015 All rights reserved.                    *
+ *                                                                  *
+ * US Government Users Restricted Rights - Use, duplication or      *
+ * disclosure restricted by GSA ADP Schedule Contract with          *
+ * IBM Corp.                                                        *
+ *                                                                  *
+ * DISCLAIMER OF WARRANTIES. The following [enclosed] code is       *
+ * sample code created by IBM Corporation. This sample code is      *
+ * not part of any standard or IBM product and is provided to you   *
+ * solely for the purpose of assisting you in the development of    *
+ * your applications. The code is provided "AS IS", without         *
+ * warranty of any kind. IBM shall not be liable for any damages    *
+ * arising out of your use of the sample code, even if they have    *
+ * been advised of the possibility of such damages.                 *
+ ********************************************************************
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+uploadArchives {
+  Properties props = new Properties()
+  // credentials are stored externally in ~/.gradle/gradle.properties
+  def propsFile = new java.io.File(System.getProperty("user.home") + "/.gradle/gradle.properties")
+  if (propsFile.exists()) {
+    props.load(new FileInputStream(propsFile))
+  }
+  def user = props['maven.repo.user'];
+  def pwd = props['maven.repo.password'];
+  repositories {
+    mavenDeployer {
+      pom.groupId = 'com.ibm.caas'
+      pom.artifactId = 'android_sdk'
+      pom.version = '1.0.3-SNAPSHOT' // to publish to "snapshots" repo
+      //pom.version = '1.0.3' // to publish to "releases" repo
+      pom.project {
+        name 'MACM Android SDK'
+
+        scm {
+          url 'https://github..com/digexp/MACM-SDK-android'
+        }
+      }
+      def repositoriesUrl = "http://myhost.com:myport/path/to/repositories/"
+      repository(url: repositoriesUrl + "releases/") {
+        authentication(userName: user, password: pwd)
+      }
+      snapshotRepository(url: repositoriesUrl + "snapshots/") {
+        authentication(userName: user, password: pwd)
+      }
+    }
+  }
+}
+
+task androidJavadocs(type: Javadoc) {
+  source = android.sourceSets.main.java.srcDirs
+  ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+  classpath += files(ext.androidJar)
+  title = "IBM Content as a Service SDK"
+
+  options {
+    links "http://docs.oracle.com/javase/6/docs/api/"
+    linksOffline "http://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
+  }
+  exclude '**/BuildConfig.java'
+  exclude '**/R.java'
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+  classifier = 'javadoc'
+  from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+  classifier = 'sources'
+  from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+  archives androidSourcesJar
+  archives androidJavadocsJar
+}
+
+android {
+  compileSdkVersion 16
+  buildToolsVersion "21.1.2"
+  publishNonDefault true
+  defaultConfig {
+    //applicationId 'com.ibm.caas'
+    testApplicationId "com.ibm.caas.sdk.test"
+    minSdkVersion 16
+    targetSdkVersion 21
+    versionCode 1
+    versionName "1.0"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+    debug {
+      debuggable true
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_6
+    targetCompatibility JavaVersion.VERSION_1_6
+  }
+
+  packagingOptions {
+    exclude 'LICENSE.txt'
+    exclude 'APK LICENSE.txt'
+  }
+
+  testOptions {
+    unitTests.returnDefaultValues = true
+  }
+
+  productFlavors {
+  }
+
+  sourceSets {
+    test {
+      java.srcDirs = ['src/androidTest/java/']
+    }
+    instrumentTest {
+      java.srcDirs = ['src/androidTest/java/']
+    }
+  }
+
+}
+
+dependencies {
+  compile 'com.android.support.test:runner:0.2'
+  compile 'com.android.support.test:rules:0.2'
+  compile 'com.android.support.test.espresso:espresso-core:2.1'
+}

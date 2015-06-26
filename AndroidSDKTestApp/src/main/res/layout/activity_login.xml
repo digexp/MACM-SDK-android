@@ -1,0 +1,63 @@
+<!--
+ ********************************************************************
+ * Licensed Materials - Property of IBM                             *
+ *                                                                  *
+ * Copyright IBM Corp. 2015 All rights reserved.                    *
+ *                                                                  *
+ * US Government Users Restricted Rights - Use, duplication or      *
+ * disclosure restricted by GSA ADP Schedule Contract with          *
+ * IBM Corp.                                                        *
+ *                                                                  *
+ * DISCLAIMER OF WARRANTIES. The following [enclosed] code is       *
+ * sample code created by IBM Corporation. This sample code is      *
+ * not part of any standard or IBM product and is provided to you   *
+ * solely for the purpose of assisting you in the development of    *
+ * your applications. The code is provided "AS IS", without         *
+ * warranty of any kind. IBM shall not be liable for any damages    *
+ * arising out of your use of the sample code, even if they have    *
+ * been advised of the possibility of such damages.                 *
+ ********************************************************************
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent" android:layout_height="match_parent"
+  android:gravity="center_horizontal" android:orientation="vertical"
+  android:paddingBottom="@dimen/activity_vertical_margin" android:paddingLeft="@dimen/activity_horizontal_margin"
+  android:paddingRight="@dimen/activity_horizontal_margin" android:paddingTop="@dimen/activity_vertical_margin"
+  tools:context="com.ibm.caas.sdktest.activities.LoginActivity">
+
+  <!-- Login progress -->
+
+  <ProgressBar
+    android:id="@+id/login_progress"
+    style="?android:attr/progressBarStyleLarge"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:visibility="gone"/>
+
+  <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+
+    <AutoCompleteTextView android:id="@+id/server" android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:hint="@string/prompt_server" android:inputType="textUri" android:maxLines="1" android:singleLine="true"
+      android:text="@string/server_url_default" />
+
+    <AutoCompleteTextView android:id="@+id/user" android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:hint="@string/prompt_user" android:inputType="text" android:maxLines="1" android:singleLine="true" android:text="@string/username_default"/>
+
+    <EditText android:id="@+id/password" android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:hint="@string/prompt_password" android:inputType="textPassword" android:maxLines="1"
+      android:singleLine="true" android:text="@string/password_default"/>
+
+    <Button android:id="@+id/email_sign_in_button" style="?android:textAppearanceSmall"
+      android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp"
+      android:text="@string/action_sign_in" android:textStyle="bold"/>
+
+  </LinearLayout>
+
+  <ScrollView android:id="@+id/login_form" android:layout_width="match_parent" android:layout_height="match_parent"/>
+
+</LinearLayout>
+
+
+
