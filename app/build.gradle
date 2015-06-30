@@ -141,3 +141,11 @@ dependencies {
   compile 'com.android.support.test:rules:0.2'
   compile 'com.android.support.test.espresso:espresso-core:2.1'
 }
+
+assembleRelease << {
+  copy {
+    from 'build/outputs/aar'
+    into '../dist'
+    include '**/app-release.aar'
+  }
+}
