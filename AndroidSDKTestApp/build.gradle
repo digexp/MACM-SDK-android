@@ -53,10 +53,17 @@ android {
   }
 }
 
+repositories {
+  flatDir {
+    dirs '../dist'
+  }
+}
+
 dependencies {
   releaseCompile project(path: ':app', configuration: 'release')
   debugCompile   project(path: ':app', configuration: 'debug')
-  //compile 'com.ibm.caas:android_sdk:1.0.0-SNAPSHOT'
+  // alternatively, reference the SDK as a pre-build android archive
+  //compile(name: 'MACM-SDK-android-release', ext: 'aar')
   compile 'com.android.support.test:runner:0.2'
   compile 'com.android.support.test:rules:0.2'
   compile 'com.android.support.test.espresso:espresso-core:2.1'

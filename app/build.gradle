@@ -146,6 +146,7 @@ assembleRelease << {
   copy {
     from 'build/outputs/aar'
     into '../dist'
+    rename { String fileName -> fileName.replace('app-', 'MACM-SDK-android-') }
     include '**/app-release.aar'
   }
 }

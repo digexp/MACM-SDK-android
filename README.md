@@ -21,9 +21,20 @@ The Android SDK is an Android API to retrieve content from a MACM server.
 
 ## Installation
 
-The SDK may be installed by installing archives from the Maven repository [android_sdk](http://visustar.francelab.fr.ibm.com:8081/nexus/#nexus-search;quick~android_sdk).
-Developers can use Maven, Gradle, Ivy, which can significantly shorten the startup time for new projects and lessen the burden of managing library version requirements as
-well as the dependencies between them.
+The SDK may be installed by referencing the **MACM-SDK-android-xxx.aar** android archive found in this repository's *dist/* folder.
+For instance, this can be done as follows in your build.gradle script, assuming the .aar file was copied in the app's 'libs/' folder:
+
+```groovy
+repositories {
+  flatDir {
+    dirs 'libs'
+  }
+}
+
+dependencies {
+  compile(name: 'MACM-SDK-android-release', ext: 'aar')
+}
+```
 
 ## Getting started
 ### Authentication
