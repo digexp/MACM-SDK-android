@@ -53,6 +53,8 @@ public class ItemDetailFragment extends Fragment {
       setViewText(R.id.isbn, "isbn");
       setViewText(R.id.price, "price");
       setViewText(R.id.rating, "rating");
+      setViewText(R.id.categories, "categories");
+      setViewText(R.id.keywords, "keywords");
     }
     return rootView;
   }
@@ -65,6 +67,7 @@ public class ItemDetailFragment extends Fragment {
   private void setViewText(int resource, String attribute) {
     TextView view = (TextView) rootView.findViewById(resource);
     Object value = item.getElement(attribute);
+    if (value == null) value = item.getProperty(attribute);
     if (value == null) value = "";
     //Log.v(LOG_TAG, String.format("setViewText(resource=%d, attribute=%s) : view=%s, value=%s (%s)", resource, attribute, view, value, value.getClass().getSimpleName()));
     view.setText(value.toString());

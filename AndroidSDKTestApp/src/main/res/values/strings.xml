@@ -26,7 +26,12 @@
   <string name="title_activity_content_types">Content Types</string>
 
   <!-- url, user and password for the MACM instance -->
+  <!--
   <string name="server_url_default">https://macm-mobile-nightly.rtp.raleigh.ibm.com:10042</string>
+  <string name="macm_lib_default">OOTB Content</string>
+  -->
+  <string name="server_url_default">http://macm-master-cf06.rtp.raleigh.ibm.com:10039</string>
+  <string name="macm_lib_default">MACM Default Application</string>
   <string name="username_default">wpsadmin</string>
   <string name="password_default">wpsadmin</string>
 
@@ -36,5 +41,7 @@
   <string name="isbn_label"> ISBN</string>
   <string name="price_label">Price</string>
   <string name="rating_label">Rating</string>
+  <string name="categories_label">Categories</string>
+  <string name="keywords_label">Keywords</string>
 
  </resources>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,10 +61,12 @@ public class ItemListAdapter extends ArrayAdapter<CAASContentItem> {
     String title = items.get(position).getTitle();
     textView.setText(title);
     //URL imageURL = items.get(position).getElement("cover");
-    String imageURL = items.get(position).getElement("cover");
+    CAASContentItem item = items.get(position);
+    String imageURL = item.getElement("cover");
     boolean displayImages = true;
     if ((imageURL != null) && displayImages) {
       CAASService service = GenericCache.getInstance().get(Constants.SERVER);
+      Log.v(LOG_TAG, "getView(): title='" + item.getTitle() + "', imageURL='" + imageURL + "', server url='" + service.getServerURL() + "'");
       final String fullURL = service.getServerURL() + imageURL.toString();
       Bitmap bitmap = GenericCache.getInstance().get(fullURL);
       if (bitmap == null) {

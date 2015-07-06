@@ -21,16 +21,17 @@
 
 <resources>
 
-    <!-- Strings related to login -->
-    <string name="prompt_port">Port</string>
-    <string name="prompt_server">Server URL</string>
-    <string name="prompt_user">User</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_in_short">Sign in</string>
+  <!-- Strings related to login -->
+  <string name="prompt_port">Port</string>
+  <string name="prompt_server">Server URL</string>
+  <string name="prompt_user">User</string>
+  <string name="prompt_password">Password</string>
+  <string name="prompt_macm_lib">MACM Library</string>
+  <string name="action_sign_in">Sign in</string>
+  <string name="action_sign_in_short">Sign in</string>
 
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+  <string name="error_invalid_email">This email address is invalid</string>
+  <string name="error_invalid_password">This password is too short</string>
+  <string name="error_incorrect_password">This password is incorrect</string>
+  <string name="error_field_required">This field is required</string>
 </resources>

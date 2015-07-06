@@ -28,6 +28,7 @@ import com.ibm.caas.sdktest.util.Settings;
 public class LoginActivity extends Activity {
   // UI references.
   AutoCompleteTextView serverView;
+  AutoCompleteTextView macmLibView;
   AutoCompleteTextView userView;
   EditText passwordView;
   View progressView;
@@ -39,6 +40,7 @@ public class LoginActivity extends Activity {
     setContentView(R.layout.activity_login);
     // Set up the login form.
     serverView = (AutoCompleteTextView) findViewById(R.id.server);
+    macmLibView = (AutoCompleteTextView) findViewById(R.id.macm_lib);
     userView = (AutoCompleteTextView) findViewById(R.id.user);
     passwordView = (EditText) findViewById(R.id.password);
     passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -70,6 +72,7 @@ public class LoginActivity extends Activity {
     passwordView.setError(null);
     // Store values at the time of the login attempt.
     Settings.server = serverView.getText().toString();
+    Settings.macmLib = macmLibView.getText().toString();
     Settings.user = userView.getText().toString();
     Settings.password = passwordView.getText().toString();
     boolean cancel = false;

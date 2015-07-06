@@ -11,6 +11,7 @@ public class Settings {
 	public static String port;
 	public static String contextRoot;
 	public static boolean ssl;
+	public static String macmLib;
 
 	public static void load(Context c) {
 		SharedPreferences settings = c.getSharedPreferences("login_data", Context.MODE_PRIVATE);
@@ -19,6 +20,7 @@ public class Settings {
 		port = settings.getString("port", null);
 		contextRoot = settings.getString("contextroot", null);
 		ssl = settings.getBoolean("ssl", false);
+		macmLib = settings.getString("macmLib", null);
 	}
 
 	public static void store(Context c) {
@@ -29,6 +31,7 @@ public class Settings {
 		editor.putString("port", port);
 		editor.putString("contextroot", contextRoot);
 		editor.putBoolean("ssl", ssl);
+		editor.putString("macmLib", macmLib);
 		// Commit the edits!
 		editor.commit();
 	}

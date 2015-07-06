@@ -20,6 +20,7 @@ import com.ibm.caas.sdktest.R;
 import com.ibm.caas.sdktest.util.Constants;
 import com.ibm.caas.sdktest.util.GeneralUtils;
 import com.ibm.caas.sdktest.util.GenericCache;
+import com.ibm.caas.sdktest.util.Settings;
 
 import java.util.List;
 
@@ -72,7 +73,8 @@ public class ContentTypesActivity extends ListActivity {
         }
       };
       CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
-      request.setPath("OOTB Content/Content Types/" + contentType);
+      request.setPath(Settings.macmLib + "/Content Types/" + contentType);
+      request.addProperties("id", "title", "categories", "keywords");
       request.addElements("cover", "author", "publish_date", "isbn", "price", "rating");
       request.setPageNumber(1);
       request.setPageSize(10);

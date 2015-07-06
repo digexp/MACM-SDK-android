@@ -42,6 +42,9 @@
       android:hint="@string/prompt_server" android:inputType="textUri" android:maxLines="1" android:singleLine="true"
       android:text="@string/server_url_default" />
 
+    <AutoCompleteTextView android:id="@+id/macm_lib" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:hint="@string/prompt_macm_lib" android:inputType="text" android:maxLines="1" android:singleLine="true" android:text="@string/macm_lib_default"/>
+
     <AutoCompleteTextView android:id="@+id/user" android:layout_width="match_parent" android:layout_height="wrap_content"
       android:hint="@string/prompt_user" android:inputType="text" android:maxLines="1" android:singleLine="true" android:text="@string/username_default"/>
 

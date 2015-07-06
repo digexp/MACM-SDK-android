@@ -130,6 +130,7 @@ public class ItemListFragment extends ListFragment {
       };
       CAASContentItemRequest request = new CAASContentItemRequest(callback);
       request.setOid(item.getOid());
+      request.addProperties("id", "title", "categories", "keywords");
       server.executeRequest(request);
     } catch(Exception e) {
       Log.e(LOG_TAG, "error in onListItemClick(): ", e);
