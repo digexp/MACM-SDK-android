@@ -48,6 +48,7 @@ public class ItemDetailFragment extends Fragment {
     rootView.findViewById(0);
     // update the text fields values
     if (item != null) {
+      setViewText(R.id.title_detail, "title");
       setViewText(R.id.author, "author");
       setViewText(R.id.published, "publish_date");
       setViewText(R.id.isbn, "isbn");

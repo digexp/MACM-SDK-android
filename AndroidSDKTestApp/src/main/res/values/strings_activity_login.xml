@@ -22,11 +22,30 @@
 <resources>
 
   <!-- Strings related to login -->
+  <!-- url, user and password for the MACM instance -->
+  <!--
+  <string name="server_url_default">https://macm-mobile-nightly.rtp.raleigh.ibm.com:10042</string>
+  <string name="macm_lib_default">OOTB Content</string>
+  <string name="server_url_default">http://macm-master-cf06.rtp.raleigh.ibm.com:10039</string>
+  <string name="username_default">wpsadmin</string>
+  <string name="password_default">wpsadmin</string>
+  -->
+  <string name="server_url_default">http://macmbeta.com</string>
+  <string name="macm_context_default">wps</string>
+  <string name="macm_tenant_default"></string>
+  <string name="macm_lib_default">MACM Default Application</string>
+  <string name="username_default"></string>
+  <string name="password_default"></string>
+
+
   <string name="prompt_port">Port</string>
   <string name="prompt_server">Server URL</string>
   <string name="prompt_user">User</string>
   <string name="prompt_password">Password</string>
+  <string name="prompt_macm_context">Context root</string>
+  <string name="prompt_macm_tenant">Tenant</string>
   <string name="prompt_macm_lib">MACM Library</string>
+
   <string name="action_sign_in">Sign in</string>
   <string name="action_sign_in_short">Sign in</string>
 

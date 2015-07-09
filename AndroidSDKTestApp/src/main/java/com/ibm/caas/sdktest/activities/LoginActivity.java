@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ibm.caas.CAASDataCallback;
+import com.ibm.caas.CAASErrorResult;
 import com.ibm.caas.CAASService;
 import com.ibm.caas.sdktest.R;
 import com.ibm.caas.sdktest.util.Constants;
@@ -28,6 +29,8 @@ import com.ibm.caas.sdktest.util.Settings;
 public class LoginActivity extends Activity {
   // UI references.
   AutoCompleteTextView serverView;
+  AutoCompleteTextView macmContextView;
+  AutoCompleteTextView macmTenantView;
   AutoCompleteTextView macmLibView;
   AutoCompleteTextView userView;
   EditText passwordView;
@@ -40,6 +43,8 @@ public class LoginActivity extends Activity {
     setContentView(R.layout.activity_login);
     // Set up the login form.
     serverView = (AutoCompleteTextView) findViewById(R.id.server);
+    macmContextView = (AutoCompleteTextView) findViewById(R.id.macm_context);
+    macmTenantView = (AutoCompleteTextView) findViewById(R.id.macm_tenant);
     macmLibView = (AutoCompleteTextView) findViewById(R.id.macm_lib);
     userView = (AutoCompleteTextView) findViewById(R.id.user);
     passwordView = (EditText) findViewById(R.id.password);
@@ -72,11 +77,14 @@ public class LoginActivity extends Activity {
     passwordView.setError(null);
     // Store values at the time of the login attempt.
     Settings.server = serverView.getText().toString();
+    Settings.macmContext = macmContextView.getText().toString();
+    Settings.macmTenant = macmTenantView.getText().toString();
     Settings.macmLib = macmLibView.getText().toString();
     Settings.user = userView.getText().toString();
     Settings.password = passwordView.getText().toString();
     boolean cancel = false;
     View focusView = null;
+    /*
     // Check for a valid password, if the user entered one.
     if (!TextUtils.isEmpty(Settings.password) && !isPasswordValid(Settings.password)) {
       passwordView.setError(getString(R.string.error_invalid_password));
@@ -93,18 +101,44 @@ public class LoginActivity extends Activity {
       focusView = userView;
       cancel = true;
     }
+    */
     if (cancel) {
       // There was an error; don't attempt login and focus the first form field with an error.
       focusView.requestFocus();
     } else {
       // Show a progress spinner, and kick off a background task to perform the user login attempt.
-      CAASService server = new CAASService(Settings.server, "wps", "", Settings.user, Settings.password);
-      server.setAndroidContext(getApplicationContext());
-      server.setAllowUntrustedCertificates(true);
-      GenericCache.getInstance().put(Constants.SERVER , server);
-      //TestRequests.doSomeQueries();
-      startActivity(new Intent(this.getApplicationContext(), ContentTypesActivity.class));
-      finish();
+      CAASService service = new CAASService(Settings.server, Settings.macmContext, Settings.macmTenant, Settings.user, Settings.password);
+      service.setAndroidContext(getApplicationContext());
+      service.setAllowUntrustedCertificates(true);
+      GenericCache.getInstance().put(Constants.SERVER, service);
+      CAASDataCallback<Void> callback = new CAASDataCallback<Void>() {
+        @Override
+        public void onSuccess(Void notUsed) {
+          LoginActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              showProgress(false);
+            }
+          });
+          startActivity(new Intent(LoginActivity.this.getApplicationContext(), ContentTypesActivity.class));
+          //finish();
+        }
+
+        @Override
+        public void onError(final CAASErrorResult error) {
+          LoginActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              showProgress(false);
+              String msg = error.getMessage();
+              int code = error.getStatusCode();
+              userView.setError("connection error" + (msg != null ? ": " + msg : (code > 0 ? ": status code " + code : "")) + " - please try again");
+            }
+          });
+        }
+      };
+      showProgress(true);
+      service.signIn(Settings.user, Settings.password, callback);
     }
   }
 

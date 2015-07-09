@@ -177,8 +177,6 @@ public class CAASService {
     this.serverURL = serverURL;
     this.contextRoot = contextRoot;
     this.instance = instance;
-    this.userName = userName;
-    this.password = password;
     if (USE_AUTHENTICATOR) {
       // handles basic auth automatically
       Authenticator auth = new Authenticator() {
@@ -483,10 +481,11 @@ public class CAASService {
    */
   Uri getBaseQueryURI() throws Exception {
     URL url = new URL(getServerURL());
-    Uri.Builder builder = new Uri.Builder().scheme(url.getProtocol()).encodedAuthority(url.getHost() + ":" + url.getPort())
+    int port = url.getPort();
+    String portStr = (port < 0) ? "" : ":" + port;
+    Uri.Builder builder = new Uri.Builder().scheme(url.getProtocol()).encodedAuthority(url.getHost() + portStr)
       .appendEncodedPath(getContextRoot())
       .appendEncodedPath("myportal");
-      //.appendEncodedPath("mycontenthandler");
     String instance = getInstance();
     if ((instance != null) && !"".equals(instance.trim())) {
       builder.appendEncodedPath(getInstance());
@@ -501,7 +500,9 @@ public class CAASService {
    */
   private Uri getBasicAuthenticationURI() throws Exception {
     URL url = new URL(getServerURL());
-    Uri.Builder builder = new Uri.Builder().scheme(url.getProtocol()).encodedAuthority(url.getHost() + ":" + url.getPort())
+    int port = url.getPort();
+    String portStr = (port < 0) ? "" : ":" + port;
+    Uri.Builder builder = new Uri.Builder().scheme(url.getProtocol()).encodedAuthority(url.getHost() + portStr)
       .appendEncodedPath(getContextRoot())
       .appendEncodedPath("mycontenthandler");
     String instance = getInstance();

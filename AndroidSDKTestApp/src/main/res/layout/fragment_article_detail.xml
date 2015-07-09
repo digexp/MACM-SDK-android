@@ -28,6 +28,7 @@
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content" android:layout_height="match_parent" android:orientation="vertical"
     android:padding="8dp">
 
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/title_label"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/author_label"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/published_label"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/isbn_label"/>
@@ -42,6 +43,7 @@
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content" android:layout_height="match_parent" android:orientation="vertical"
     android:padding="8dp">
 
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/title_detail"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/author"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/published"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/isbn"/>

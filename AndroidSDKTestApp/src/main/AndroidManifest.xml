@@ -25,11 +25,11 @@
 
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
-  <application android:allowBackup="true"
+  <application android:allowBackup="false"
     android:icon="@drawable/ic_launcher"
     android:label="@string/test_app_name"
     android:theme="@style/AppTheme"
-    tools:replace="android:label">
+    tools:replace="android:label,android:allowBackup">
 
     <activity
       android:name="com.ibm.caas.sdktest.activities.LoginActivity"

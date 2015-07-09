@@ -5,6 +5,8 @@ The Android SDK is an Android API to retrieve content from a MACM server.
 ### Table Of Contents
 
 1. [Installation](#installation)
+    1. [SDK](#sdk)
+    2. [Sample app](#sample-app)
 2. [Getting started](#getting-started)
     1. [Authentication](#authentication)
         1. [Authentication with the credentials of the application](#authentication-with-the-credentials-of-the-application)
@@ -20,6 +22,7 @@ The Android SDK is an Android API to retrieve content from a MACM server.
     2. [Enabling geo-location retrieval](#enabling-geo-location-retrieval)
 
 ## Installation
+### SDK
 
 The SDK may be installed by referencing the **MACM-SDK-android-xxx.aar** android archive found in this repository's *dist/* folder.
 For instance, this can be done as follows in your build.gradle script, assuming the .aar file was copied in the app's 'libs/' folder:
@@ -36,13 +39,21 @@ dependencies {
 }
 ```
 
+### Sample app
+
+To install and run the sample app 'AndroidSDKTestApp':
+* clone this Git repostiory
+* import it in Android Studio
+* the app can now be built and run from Android Studio as any other porject
+
+
 ## Getting started
 ### Authentication
 
 Authentication with the remote server can be done in two ways:
 #### Authentication with the credentials of the application
 
-The username and password are harcoded in the application and the following constructor should be used:
+The username and password are hardcoded in the application and the following constructor should be used:
 
 ```java
 // create a service instance with application credentials

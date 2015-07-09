@@ -31,7 +31,7 @@ public class ContentTypesActivity extends ListActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_content_types);
-    String[] items = { "Book", "Movie" };
+    String[] items = { "Book", "Offer" };
     ListView listView = (ListView) findViewById(android.R.id.list);
     ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, android.R.id.text1, items);
     this.setListAdapter(adapter);
