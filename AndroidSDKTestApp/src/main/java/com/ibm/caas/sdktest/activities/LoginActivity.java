@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -82,72 +81,38 @@ public class LoginActivity extends Activity {
     Settings.macmLib = macmLibView.getText().toString();
     Settings.user = userView.getText().toString();
     Settings.password = passwordView.getText().toString();
-    boolean cancel = false;
-    View focusView = null;
-    /*
-    // Check for a valid password, if the user entered one.
-    if (!TextUtils.isEmpty(Settings.password) && !isPasswordValid(Settings.password)) {
-      passwordView.setError(getString(R.string.error_invalid_password));
-      focusView = passwordView;
-      cancel = true;
-    }
-    // Check for a valid user.
-    if (TextUtils.isEmpty(Settings.user)) {
-      userView.setError(getString(R.string.error_field_required));
-      focusView = userView;
-      cancel = true;
-    } else if (!isUserValid(Settings.user)) {
-      userView.setError(getString(R.string.error_invalid_email));
-      focusView = userView;
-      cancel = true;
-    }
-    */
-    if (cancel) {
-      // There was an error; don't attempt login and focus the first form field with an error.
-      focusView.requestFocus();
-    } else {
-      // Show a progress spinner, and kick off a background task to perform the user login attempt.
-      CAASService service = new CAASService(Settings.server, Settings.macmContext, Settings.macmTenant, Settings.user, Settings.password);
-      service.setAndroidContext(getApplicationContext());
-      service.setAllowUntrustedCertificates(true);
-      GenericCache.getInstance().put(Constants.SERVER, service);
-      CAASDataCallback<Void> callback = new CAASDataCallback<Void>() {
-        @Override
-        public void onSuccess(Void notUsed) {
-          LoginActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              showProgress(false);
-            }
-          });
-          startActivity(new Intent(LoginActivity.this.getApplicationContext(), ContentTypesActivity.class));
-          //finish();
-        }
 
-        @Override
-        public void onError(final CAASErrorResult error) {
-          LoginActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              showProgress(false);
-              String msg = error.getMessage();
-              int code = error.getStatusCode();
-              userView.setError("connection error" + (msg != null ? ": " + msg : (code > 0 ? ": status code " + code : "")) + " - please try again");
-            }
-          });
-        }
-      };
-      showProgress(true);
-      service.signIn(Settings.user, Settings.password, callback);
-    }
-  }
+    // Show a progress spinner, and kick off a background task to perform the user login attempt.
+    CAASService service = new CAASService(Settings.server, Settings.macmContext, Settings.macmTenant, Settings.user, Settings.password);
+    service.setAndroidContext(getApplicationContext());
+    service.setAllowUntrustedCertificates(true);
+    GenericCache.getInstance().put(Constants.SERVER, service);
+    CAASDataCallback<Void> callback = new CAASDataCallback<Void>() {
+      @Override
+      public void onSuccess(Void notUsed) {
+        LoginActivity.this.runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            showProgress(false);
+          }
+        });
+      }
 
-  private boolean isUserValid(String user) {
-    return (user != null) && !"".equals(user.trim());
-  }
-
-  private boolean isPasswordValid(String password) {
-    return password.length() > 4;
+      @Override
+      public void onError(final CAASErrorResult error) {
+        LoginActivity.this.runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            showProgress(false);
+            String msg = error.getMessage();
+            int code = error.getStatusCode();
+            userView.setError("connection error" + (msg != null ? ": " + msg : (code > 0 ? ": status code " + code : "")) + " - please try again");
+          }
+        });
+      }
+    };
+    showProgress(true);
+    service.signIn(Settings.user, Settings.password, callback);
   }
 
   /**

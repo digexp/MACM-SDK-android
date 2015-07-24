@@ -22,14 +22,8 @@
 <resources>
 
   <!-- Strings related to login -->
-  <!-- url, user and password for the MACM instance -->
-  <!--
-  <string name="server_url_default">https://macm-mobile-nightly.rtp.raleigh.ibm.com:10042</string>
-  <string name="macm_lib_default">OOTB Content</string>
-  <string name="server_url_default">http://macm-master-cf06.rtp.raleigh.ibm.com:10039</string>
-  <string name="username_default">wpsadmin</string>
-  <string name="password_default">wpsadmin</string>
-  -->
+
+  <!-- server url, context , tenant, MACM library name, user and password for the MACM instance -->
   <string name="server_url_default">http://macmbeta.com</string>
   <string name="macm_context_default">wps</string>
   <string name="macm_tenant_default"></string>
@@ -37,7 +31,7 @@
   <string name="username_default"></string>
   <string name="password_default"></string>
 
-
+  <!-- prompt text shown in empty fields -->
   <string name="prompt_port">Port</string>
   <string name="prompt_server">Server URL</string>
   <string name="prompt_user">User</string>
@@ -46,11 +40,7 @@
   <string name="prompt_macm_tenant">Tenant</string>
   <string name="prompt_macm_lib">MACM Library</string>
 
+  <!-- Sign-in button label -->
   <string name="action_sign_in">Sign in</string>
-  <string name="action_sign_in_short">Sign in</string>
 
-  <string name="error_invalid_email">This email address is invalid</string>
-  <string name="error_invalid_password">This password is too short</string>
-  <string name="error_incorrect_password">This password is incorrect</string>
-  <string name="error_field_required">This field is required</string>
 </resources>

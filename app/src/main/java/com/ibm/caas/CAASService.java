@@ -147,6 +147,11 @@ public class CAASService {
   }
 
   /**
+   * Measures the time taken by one or more http requests.
+   */
+  private PerformanceMeasurement performanceHook = new PerformanceMeasurement();
+
+  /**
    * Initialize this service with the specified server URL, context root, tenant name and credentials.
    * @param serverURL the base server URL in the form <code>http[s]://hostname[:port]</code>.
    * @param contextRoot the web context root name, for instance "wps".
@@ -465,10 +470,8 @@ public class CAASService {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     byte[] buffer = new byte[2048];
     int n;
-    int pos = 0;
     while ((n = in.read(buffer)) > 0) {
       out.write(buffer, 0, n);
-      pos += n;
     }
     out.close();
     return out.toByteArray();
@@ -608,7 +611,6 @@ public class CAASService {
   private class RequestAsyncTask<T> extends AsyncTask<Void, Void, CAASRequestResult<T>> {
     private final CAASRequest<T> request;
     private final CAASRequestResult<T> requestResult;
-    private boolean authChallenge = false;
 
     private RequestAsyncTask(CAASRequest<T> request, CAASRequestResult<T> requestResult) {
       this.request = request;
@@ -644,18 +646,22 @@ public class CAASService {
           }
           logRequestHeaders(connection);
           // workaround for issue described at http://stackoverflow.com/q/17121213
+          long time = System.nanoTime();
           try {
             statusCode = connection.getResponseCode();
+            time = System.nanoTime() - time;
           } catch(IOException e) {
+            time = System.nanoTime() - time;
             statusCode = connection.getResponseCode();
             if (statusCode != 401) {
               Log.e(LOG_TAG, "code " + statusCode + ", exception: ", e);
             }
           } finally {
+            performanceHook.newTime(time / 1000000d);
             logResponseHeaders(connection);
           }
           if (statusCode != 200) {
-            CAASErrorResult error = null;
+            CAASErrorResult error;
             logErrorBody(connection);
             // if version is >= JellyBean and an authentication challenge is issued, then handle re-authentication and resend the request
             if ((statusCode == 401) && !reauthenticationRequired && !USE_AUTHENTICATOR && hasAuthenticationChallenge(connection)) {
@@ -705,5 +711,13 @@ public class CAASService {
       ((HttpsURLConnection) connection).setSSLSocketFactory(untrustedSocketFactory);
     }
     return connection;
+  }
+
+  /**
+   * Get the object that measures the time taken by one or more http requests.
+   * @return a {@link PerformanceMeasurement} instance.
+   */
+  public String getPerformanceStats() {
+    return performanceHook.toString();
   }
 }
