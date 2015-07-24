@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -96,6 +97,7 @@ public class LoginActivity extends Activity {
             showProgress(false);
           }
         });
+        startActivity(new Intent(LoginActivity.this.getApplicationContext(), ContentTypesActivity.class));
       }
 
       @Override
