@@ -24,10 +24,10 @@
   <!-- Strings related to login -->
 
   <!-- server url, context , tenant, MACM library name, user and password for the MACM instance -->
-  <string name="server_url_default">http://macmbeta.com</string>
+  <string name="server_url_default">https://macm-rendering.saas.ibmcloud.com</string>
   <string name="macm_context_default">wps</string>
   <string name="macm_tenant_default"></string>
-  <string name="macm_lib_default">MACM Default Application</string>
+  <string name="macm_lib_default">Samples</string>
   <string name="username_default"></string>
   <string name="password_default"></string>
 
