@@ -22,68 +22,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
-uploadArchives {
-  Properties props = new Properties()
-  // credentials are stored externally in ~/.gradle/gradle.properties
-  def propsFile = new java.io.File(System.getProperty("user.home") + "/.gradle/gradle.properties")
-  if (propsFile.exists()) {
-    props.load(new FileInputStream(propsFile))
-  }
-  def user = props['maven.repo.user'];
-  def pwd = props['maven.repo.password'];
-  repositories {
-    mavenDeployer {
-      pom.groupId = 'com.ibm.caas'
-      pom.artifactId = 'android_sdk'
-      pom.version = '1.0.3-SNAPSHOT' // to publish to "snapshots" repo
-      //pom.version = '1.0.3' // to publish to "releases" repo
-      pom.project {
-        name 'MACM Android SDK'
-
-        scm {
-          url 'https://github..com/digexp/MACM-SDK-android'
-        }
-      }
-      def repositoriesUrl = "http://myhost.com:myport/path/to/repositories/"
-      repository(url: repositoriesUrl + "releases/") {
-        authentication(userName: user, password: pwd)
-      }
-      snapshotRepository(url: repositoriesUrl + "snapshots/") {
-        authentication(userName: user, password: pwd)
-      }
-    }
-  }
-}
-
-task androidJavadocs(type: Javadoc) {
-  source = android.sourceSets.main.java.srcDirs
-  ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-  classpath += files(ext.androidJar)
-  title = "IBM Content as a Service SDK"
-
-  options {
-    links "http://docs.oracle.com/javase/6/docs/api/"
-    linksOffline "http://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
-  }
-  exclude '**/BuildConfig.java'
-  exclude '**/R.java'
-}
-
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-  classifier = 'javadoc'
-  from androidJavadocs.destinationDir
-}
-
-task androidSourcesJar(type: Jar) {
-  classifier = 'sources'
-  from android.sourceSets.main.java.srcDirs
-}
-
-artifacts {
-  archives androidSourcesJar
-  archives androidJavadocsJar
-}
-
 android {
   compileSdkVersion 16
   buildToolsVersion "21.1.2"
@@ -143,10 +81,71 @@ dependencies {
 }
 
 assembleRelease << {
+  // deploy the .aar to 'dist' folder
   copy {
     from 'build/outputs/aar'
     into '../dist'
     rename { String fileName -> fileName.replace('app-', 'MACM-SDK-android-') }
     include '**/app-release.aar'
   }
+}
+
+uploadArchives {
+  Properties props = new Properties()
+  // credentials are stored externally in ~/.gradle/gradle.properties
+  def propsFile = new java.io.File(System.getProperty("user.home") + "/.gradle/gradle.properties")
+  if (propsFile.exists()) {
+    props.load(new FileInputStream(propsFile))
+  }
+  def user = props['maven.repo.user'];
+  def pwd = props['maven.repo.password'];
+  repositories {
+    mavenDeployer {
+      pom.groupId = 'com.ibm.caas'
+      pom.artifactId = 'android_sdk'
+      pom.version = '1.0.3-SNAPSHOT' // to publish to "snapshots" repo
+      //pom.version = '1.0.3' // to publish to "releases" repo
+      pom.project {
+        name 'MACM Android SDK'
+
+        scm {
+          url 'https://github..com/digexp/MACM-SDK-android'
+        }
+      }
+      def repositoriesUrl = "http://myhost.com:myport/path/to/repositories/"
+      repository(url: repositoriesUrl + "releases/") {
+        authentication(userName: user, password: pwd)
+      }
+      snapshotRepository(url: repositoriesUrl + "snapshots/") {
+        authentication(userName: user, password: pwd)
+      }
+    }
+  }
+}
+
+task androidJavadocs(type: Javadoc) {
+  source = android.sourceSets.main.java.srcDirs
+  classpath += files(android.getBootClasspath())
+  title = "IBM Content as a Service SDK"
+  options {
+    links "http://docs.oracle.com/javase/6/docs/api/"
+    linksOffline "http://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
+  }
+  exclude '**/BuildConfig.java'
+  exclude '**/R.java'
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+  classifier = 'javadoc'
+  from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+  classifier = 'sources'
+  from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+  archives androidSourcesJar
+  archives androidJavadocsJar
 }
