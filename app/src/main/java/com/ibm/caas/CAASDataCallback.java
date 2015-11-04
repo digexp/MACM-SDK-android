@@ -22,7 +22,7 @@
 package com.ibm.caas;
 
 /**
- * Callback handler invoked once the (WCM) server's response has been received.
+ * Callback handler invoked once the server's response has been received.
  * @param <T> the type of results returned by the request.
  */
 public interface CAASDataCallback<T> {

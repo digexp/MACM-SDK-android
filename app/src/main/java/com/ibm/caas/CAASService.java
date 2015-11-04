@@ -59,7 +59,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * Implementation of the service which communicates with the WCM server to authenticate and retrieve content.
+ * Implementation of the service which communicates with the server to authenticate and retrieve content.
  */
 public class CAASService {
   /**
