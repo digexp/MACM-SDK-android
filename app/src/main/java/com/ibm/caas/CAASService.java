@@ -205,7 +205,7 @@ public class CAASService {
   }
 
   /**
-   * Get the context root for the WCM server. For instance: "wps".
+   * Get the context root for the MACM server. For instance: "wps".
    * @return the context root name.
    */
   public String getContextRoot() {

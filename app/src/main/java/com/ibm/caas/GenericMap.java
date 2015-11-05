@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * Encapsulates the response received from the (WCM) server.
+ * Encapsulates the response received from the MACM server.
  * This extends <code>Iterable<Map.Entry<String, Object>></code> to allow Iterating over the entries
  * with an enhanced <code>for</code> loop, for example:
  * <pre>

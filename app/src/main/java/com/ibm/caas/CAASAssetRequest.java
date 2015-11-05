@@ -21,17 +21,15 @@
 
 package com.ibm.caas;
 
-import android.graphics.Bitmap;
-
 /**
- * Request implementation for fetching images from the server
- * and returning them as {@link Bitmap} objects directly usable in UI views.
+ * Request implementation for fetching images, PDF files or other assets from the server
+ * and returning them as byte arrays that can be converted to appropriate types for the Android platform.
  */
 public class CAASAssetRequest extends CAASRequest<byte[]> {
   private final String url;
   /**
    * Initialize this request with the specified URL and callback.
-   * @param url the URL of the image ot fetch. This must be a full, absolute URL.
+   * @param url the URL of the image ot fetch. This can be a full, absolute URL or a relative one.
    * @param callback the callback to which result notifications are dispatched.
    */
   public CAASAssetRequest(String url, CAASDataCallback<byte[]> callback) {
