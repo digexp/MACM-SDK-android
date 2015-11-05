@@ -43,9 +43,9 @@ dependencies {
 ### Sample app
 
 To install and run the sample app 'AndroidSDKTestApp':
-* clone this Git repostiory
+* clone this Git repository
 * import it in Android Studio
-* the app can now be built and run from Android Studio as any other porject
+* the app can now be built and run from Android Studio as any other project
 
 
 ## Getting started
@@ -214,7 +214,7 @@ service.executeRequest(request);
 ### Allowing untrusted certificates with HTTPS connections
 
 By default, Android only allows trusted certificates whose certificate authority is in its trusted list.
-To disable this behavior, for instance to test with seff-signed certificates, the `allowUntrustedCertificates`
+To disable this behavior, for instance to test with self-signed certificates, the `allowUntrustedCertificates`
 flag must be set to `true', as follows:
 
 ```java
