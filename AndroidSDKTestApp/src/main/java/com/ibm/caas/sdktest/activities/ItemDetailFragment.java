@@ -53,7 +53,6 @@ public class ItemDetailFragment extends Fragment {
       setViewText(R.id.published, "publish_date");
       setViewText(R.id.isbn, "isbn");
       setViewText(R.id.price, "price");
-      setViewText(R.id.rating, "rating");
       setViewText(R.id.categories, "categories");
       setViewText(R.id.keywords, "keywords");
     }

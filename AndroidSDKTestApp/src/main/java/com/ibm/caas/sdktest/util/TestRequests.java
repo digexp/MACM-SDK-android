@@ -38,7 +38,7 @@ public class TestRequests {
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
     request.setPath(path);
     request.addProperties("id", "contenttype", "title", "lastmodifieddate", "categories", "keywords");
-    request.addElements("author", "title", "publish_date", "isbn", "price", "rating", "cover");
+    request.addElements("author", "title", "publish_date", "isbn", "price", "cover");
     request.setPageSize(100);
     request.setPageNumber(1);
     service.executeRequest(request);
@@ -78,7 +78,7 @@ public class TestRequests {
       CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
       request.setPath(path);
       request.addProperties("id", "contenttype", "title", "lastmodifieddate", "categories", "keywords");
-      request.addElements("author", "title", "publish_date", "isbn", "price", "rating", "cover");
+      request.addElements("author", "title", "publish_date", "isbn", "price", "cover");
       request.setPageSize(50);
       request.setPageNumber(1);
       service.executeRequest(request);

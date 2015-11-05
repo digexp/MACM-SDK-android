@@ -75,7 +75,7 @@ public class ContentTypesActivity extends ListActivity {
       CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
       request.setPath(Settings.macmLib + "/Content Types/" + contentType);
       request.addProperties("id", "title", "categories", "keywords");
-      request.addElements("cover", "author", "publish_date", "isbn", "price", "rating");
+      request.addElements("cover", "author", "publish_date", "isbn", "price");
       request.setPageNumber(1);
       request.setPageSize(10);
       server.executeRequest(request);

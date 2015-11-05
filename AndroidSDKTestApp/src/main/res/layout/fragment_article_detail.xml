@@ -33,7 +33,6 @@
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/published_label"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/isbn_label"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/price_label"/>
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/rating_label"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/categories_label"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/keywords_label"/>
 
@@ -48,7 +47,6 @@
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/published"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/isbn"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/price"/>
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/rating"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/categories"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/keywords"/>
 
