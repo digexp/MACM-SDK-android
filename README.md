@@ -20,6 +20,7 @@ The Android SDK is an Android API to retrieve content from a MACM server.
 3. [Miscellaneous](#miscellaneous)
     1. [Allowing untrusted certificates for HTTPS connections](#allowing-untrusted-certificates-with-https-connections)
     2. [Enabling geo-location retrieval](#enabling-geo-location-retrieval)
+4. [Javadoc](#javadoc)
 
 ## Installation
 ### SDK
@@ -239,3 +240,7 @@ public class MyActivity extends Activity {
   }
 }
 ```
+
+## Javadoc
+
+The Javadoc is available on the [MACM Android SDK GitHub pages](https://digexp.github.io/MACM-SDK-android)
