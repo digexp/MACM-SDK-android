@@ -244,4 +244,4 @@ public class MyActivity extends Activity {
 ## Documentation references
 
 * [MACM Android SDK Javadoc](https://digexp.github.io/MACM-SDK-android)
-* [IBM Mobile Application Content Manager Knowledge Center](http://www-01.ibm.com/support/knowledgecenter/SSYK7J_8.5.0/macm/macm_rm.html)
+* [IBM Mobile Application Content Manager Knowledge Center](http://www-01.ibm.com/support/knowledgecenter/SSYK7J_8.5.0/macm/macm_rm.dita)
