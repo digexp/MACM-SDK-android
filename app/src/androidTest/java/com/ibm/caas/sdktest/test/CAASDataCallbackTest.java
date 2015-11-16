@@ -23,6 +23,7 @@ package com.ibm.caas.sdktest.test;
 
 import com.ibm.caas.CAASDataCallback;
 import com.ibm.caas.CAASErrorResult;
+import com.ibm.caas.CAASRequestResult;
 
 /**
  * A generic callback used for unit-testing.
@@ -33,8 +34,8 @@ public class CAASDataCallbackTest<T> implements CAASDataCallback<T> {
   CAASErrorResult error;
 
   @Override
-  public final void onSuccess(T t) {
-    result = t;
+  public final void onSuccess(CAASRequestResult<T> requestResult) {
+    this.result = requestResult.getResult();
     successful = true;
     notifyCompletion();
   }

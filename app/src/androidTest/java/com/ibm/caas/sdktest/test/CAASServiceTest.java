@@ -94,6 +94,7 @@ public class CAASServiceTest {
     assertNotNull(result);
     assertNotNull(result.getContentItems());
     assertFalse(result.getContentItems().isEmpty());
+    //assertFalse(
   }
 
   /**

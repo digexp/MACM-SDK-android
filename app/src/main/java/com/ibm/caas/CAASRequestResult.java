@@ -23,6 +23,10 @@ package com.ibm.caas;
 
 import android.os.AsyncTask;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Encapsulates the result of a request.
  * @param <C> the type of result returned by the request.
@@ -44,6 +48,10 @@ public class CAASRequestResult<C> {
    * The content-type (or mime-type) of the response body.
    */
   private String contentType;
+  /**
+   * The headers of the HTTP response sent by the MACM server.
+   */
+  private final Map<String, List<String>> responseHeaders = new HashMap<String, List<String>>();
   /**
    * The task which executes the request asynchronously.
    */
@@ -69,6 +77,23 @@ public class CAASRequestResult<C> {
    */
   public CAASRequest<C> getRequest() {
     return request;
+  }
+
+  /**
+   * Get the headers of the HTTP response sent by the MACM server.
+   * @return a mmaping of header names to the corresponding lists of values.
+   */
+  public Map<String, List<String>> getResponseHeaders() {
+    return responseHeaders;
+  }
+
+  /**
+   * Set the headers of the HTTP response sent by the MACM server.
+   * @param headers a mmaping of header names to the corresponding lists of values.
+   */
+  void setResponseHeaders(Map<String, List<String>> headers) {
+    responseHeaders.clear();
+    if (headers != null) responseHeaders.putAll(headers);
   }
 
   /**

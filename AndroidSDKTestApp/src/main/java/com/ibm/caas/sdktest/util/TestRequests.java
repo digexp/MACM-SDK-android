@@ -6,6 +6,7 @@ import com.ibm.caas.CAASContentItemsList;
 import com.ibm.caas.CAASContentItemsRequest;
 import com.ibm.caas.CAASDataCallback;
 import com.ibm.caas.CAASErrorResult;
+import com.ibm.caas.CAASRequestResult;
 import com.ibm.caas.CAASService;
 
 /**
@@ -26,8 +27,8 @@ public class TestRequests {
     final String path = Settings.macmLib + "/Views/All";
     CAASDataCallback<CAASContentItemsList> callback = new CAASDataCallback<CAASContentItemsList>() {
       @Override
-      public void onSuccess(CAASContentItemsList caasContentItems) {
-        Log.d(LOG_TAG, "onSuccess(" + path + ") got " + caasContentItems.getContentItems().size() + " items");
+      public void onSuccess(CAASRequestResult<CAASContentItemsList> requestResult) {
+        Log.d(LOG_TAG, "onSuccess(" + path + ") got " + requestResult.getResult().getContentItems().size() + " items");
       }
 
       @Override
@@ -56,7 +57,7 @@ public class TestRequests {
       Log.v(LOG_TAG, "performance test, request #" + (i+1));
       CAASDataCallback<CAASContentItemsList> callback = new CAASDataCallback<CAASContentItemsList>() {
         @Override
-        public void onSuccess(CAASContentItemsList caasContentItems) {
+        public void onSuccess(CAASRequestResult<CAASContentItemsList> requestResult) {
           notifyRequestDone();
         }
 

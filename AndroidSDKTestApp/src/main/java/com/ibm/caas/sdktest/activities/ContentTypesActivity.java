@@ -15,6 +15,7 @@ import com.ibm.caas.CAASContentItemsList;
 import com.ibm.caas.CAASContentItemsRequest;
 import com.ibm.caas.CAASDataCallback;
 import com.ibm.caas.CAASErrorResult;
+import com.ibm.caas.CAASRequestResult;
 import com.ibm.caas.CAASService;
 import com.ibm.caas.sdktest.R;
 import com.ibm.caas.sdktest.util.Constants;
@@ -58,7 +59,8 @@ public class ContentTypesActivity extends ListActivity {
       CAASService server = cache.get(Constants.SERVER);
       CAASDataCallback<CAASContentItemsList> callback = new CAASDataCallback<CAASContentItemsList>() {
         @Override
-        public void onSuccess(CAASContentItemsList dataList) {
+        public void onSuccess(CAASRequestResult<CAASContentItemsList> requestResult) {
+          CAASContentItemsList dataList = requestResult.getResult();
           cache.put(Constants.ITEMS, dataList);
           int count = 0;
           for (CAASContentItem item: dataList.getContentItems()) {

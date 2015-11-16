@@ -27,7 +27,7 @@ public class ItemDetailActivity extends Activity {
     if (bar != null) {
       CAASContentItem item = GenericCache.getInstance().get(Constants.CURRENT_ITEM, null);
       if (item != null) {
-        bar.setTitle((String) item.getTitle());
+        bar.setTitle(item.getTitle());
       }
       // Show the Up button in the action bar.
       bar.setDisplayHomeAsUpEnabled(true);

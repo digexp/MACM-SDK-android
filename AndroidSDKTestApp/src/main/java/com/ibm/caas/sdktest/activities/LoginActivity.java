@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.ibm.caas.CAASDataCallback;
 import com.ibm.caas.CAASErrorResult;
+import com.ibm.caas.CAASRequestResult;
 import com.ibm.caas.CAASService;
 import com.ibm.caas.sdktest.R;
 import com.ibm.caas.sdktest.util.Constants;
@@ -90,7 +91,7 @@ public class LoginActivity extends Activity {
     GenericCache.getInstance().put(Constants.SERVER, service);
     CAASDataCallback<Void> callback = new CAASDataCallback<Void>() {
       @Override
-      public void onSuccess(Void notUsed) {
+      public void onSuccess(CAASRequestResult<Void> requestResult) {
         LoginActivity.this.runOnUiThread(new Runnable() {
           @Override
           public void run() {

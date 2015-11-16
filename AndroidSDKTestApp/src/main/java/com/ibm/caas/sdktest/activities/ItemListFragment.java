@@ -13,6 +13,7 @@ import com.ibm.caas.CAASContentItemRequest;
 import com.ibm.caas.CAASContentItemsList;
 import com.ibm.caas.CAASDataCallback;
 import com.ibm.caas.CAASErrorResult;
+import com.ibm.caas.CAASRequestResult;
 import com.ibm.caas.CAASService;
 import com.ibm.caas.sdktest.util.Constants;
 import com.ibm.caas.sdktest.util.GeneralUtils;
@@ -119,8 +120,8 @@ public class ItemListFragment extends ListFragment {
       CAASService server = cache.get(Constants.SERVER);
       CAASDataCallback<CAASContentItem> callback = new CAASDataCallback<CAASContentItem>() {
         @Override
-        public void onSuccess(CAASContentItem data) {
-          callbacks.onItemSelected(data);
+        public void onSuccess(CAASRequestResult<CAASContentItem> requestResult) {
+          callbacks.onItemSelected(requestResult.getResult());
         }
 
         @Override

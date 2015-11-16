@@ -21,8 +21,6 @@
 
 package com.ibm.caas;
 
-import android.util.Log;
-
 import java.net.URLEncoder;
 
 /**

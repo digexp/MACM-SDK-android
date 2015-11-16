@@ -28,9 +28,9 @@ package com.ibm.caas;
 public interface CAASDataCallback<T> {
   /**
    * Called when a request to the MACM service succeeded.
-   * @param t the data received from the server.
+   * @param requestResult the data received from the server.
    */
-  void onSuccess(T t);
+  void onSuccess(CAASRequestResult<T> requestResult);
 
   /**
    * Called when an querying data from the server results in an error.

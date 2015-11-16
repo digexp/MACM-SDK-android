@@ -58,7 +58,7 @@ public class TestUtils {
   /**
    * Genrate a random string of the specified length.
    * @param length the length of the string to generate.
-   * @return A string with <code>length</code> randam upper case alphabetic characters.
+   * @return A string with <code>length</code> random upper case alphabetic characters.
    */
   public static String generateRandomString(int length) {
     StringBuilder randomString = new StringBuilder();

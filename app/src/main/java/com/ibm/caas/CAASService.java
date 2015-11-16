@@ -660,6 +660,7 @@ public class CAASService {
             performanceHook.newTime(time / 1000000d);
             logResponseHeaders(connection);
           }
+          requestResult.setResponseHeaders(connection.getHeaderFields());
           if (statusCode != 200) {
             CAASErrorResult error;
             logErrorBody(connection);
@@ -700,7 +701,7 @@ public class CAASService {
       if (result.getError() != null) {
         callback.onError(result.getError());
       } else {
-        callback.onSuccess(result.getResult());
+        callback.onSuccess(result);
       }
     }
   }

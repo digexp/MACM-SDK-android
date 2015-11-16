@@ -76,7 +76,7 @@ CAASService service = new CAASService("http://www.myhost.com:10039", "MyContextR
 // handle the sign-in result asynchronously
 CAASDataCallback<Void> callback = new CAASDataCallback<Void>() {
   @Override
-  public void onSuccess(Void result) {
+  public void onSuccess(CAASRequestResult<Void> requestResult) {
     // sign-in successful
   }
 
@@ -86,7 +86,7 @@ CAASDataCallback<Void> callback = new CAASDataCallback<Void>() {
   }
 };
 // perform the explicit sign-in with user credentials
-CAASRequestResult<Void> result = service.signIn("username", "password", callback);
+service.signIn("username", "password", callback);
 ```
 
 ### Retrieving content
@@ -97,16 +97,17 @@ CAASRequestResult<Void> result = service.signIn("username", "password", callback
 CAASService service = new CAASService("http://www.myhost.com:10039", "MyContextRoot", "MyTenant", "username", "password");
 // handle the request result asynchronously
 CAASDataCallback<CAASContentItemsList> callback = new CAASDataCallback<CAASContentItemsList>() {
- @Override
- public void onSuccess(CAASContentItemsList itemsList) {
-   List<CAASContentItem> items = itemsList.getContentItems();
-   // do something with the list of items
- }
+  @Override
+  public void onSuccess(CAASRequestResult<CAASContentItemsList> requestResult) {
+    CAASContentItemsList itemsList = requestResult.getResult();
+    List<CAASContentItem> items = itemsList.getContentItems();
+    // do something with the list of items
+  }
 
- @Override
- public void onError(CAASErrorResult error) {
-   // handle the error
- }
+  @Override
+  public void onError(CAASErrorResult error) {
+    // handle the error
+  }
 };
 // create the request
 CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
@@ -119,7 +120,7 @@ request.addElements("cover");
 request.setPageSize(10);
 request.setPageNumber(1);
 // execute the request
-CAASRequestResult<CAASContentItemsList> result = service.executeRequest(request);
+service.executeRequest(request);
 ```
 
 #### Querying a list of content items by id
@@ -140,7 +141,7 @@ request.addSortDescriptor("title", true);
 request.setWorkflowStatus(CAASContentItemsRequest.WorkflowStatus.Published);
 request.addAnyKeywords("bestseller", "top10");
 // execute the request
-CAASRequestResult<CAASContentItemsList> result = service.executeRequest(request);
+service.executeRequest(request);
 ```
 
 #### Querying a single content item by id
@@ -151,7 +152,8 @@ CAASService service = new CAASService("http://www.myhost.com:10039", "MyContextR
 // handle the request result asynchronously
 CAASDataCallback<CAASContentItem> callback = new CAASDataCallback<CAASContentItem>() {
   @Override
-  public void onSuccess(CAASContentItem item) {
+  public void onSuccess(CAASRequestResult<CAASContentItem> requestResult) {
+    CAASContentItem item = requestResult.getResult();
     // do something with the item
   }
 
@@ -166,7 +168,7 @@ CAASContentItemRequest request = new CAASContentItemRequest(callback);
 // id of the content item to retrieve
 request.setOid("5f2c3fee-3994-45d4-9570-a6aa67ff2250");
 // execute the request
-CAASRequestResult<CAASContentItem> result = service.executeRequest(request);
+service.executeRequest(request);
 ```
 
 #### Querying a single content item by path
@@ -179,7 +181,7 @@ CAASDataCallback<CAASContentItem> callback = ...;
 CAASContentItemRequest request = new CAASContentItemRequest(callback);
 request.setPath("MACM/some/content item path");
 // execute the request
-CAASRequestResult<CAASContentItem> result = service.executeRequest(request);
+service.executeRequest(request);
 ```
 
 ### Querying an asset (image) by its url
@@ -195,10 +197,18 @@ final String url = "/wps/wcm/myconnect/80686c98-9264-4391-bc00-3a039f4dc0b3/cove
 // callback that retrieves the image and sets it on a view
 CAASDataCallback<byte[]> callback = new CAASDataCallback<byte[]>() {
   @Override
-  public void onSuccess(byte[] bytes) {
-    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-    BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
-    imageView.setImageDrawable(drawable);
+  public void onSuccess(CAASRequestResult<byte[]> requestResult) {
+    // get the Content-Type response header
+    List<String> values = requestResult.getResponseHeaders().get("Content-Type");
+    if ((values != null) && !values.isEmpty()) {
+      String contentType = values.get(0);
+      // if we have an image content type, build a Bitmap object from the raw data
+      if ((contentType != null) && contentType.startsWith("image")) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
+        imageView.setImageDrawable(drawable);
+      }
+    }
   }
 
   @Override
