@@ -26,7 +26,6 @@ import android.test.suitebuilder.annotation.LargeTest;
 
 import com.ibm.caas.CAASAssetRequest;
 import com.ibm.caas.CAASContentItem;
-import com.ibm.caas.CAASContentItemRequest;
 import com.ibm.caas.CAASContentItemsList;
 import com.ibm.caas.CAASContentItemsRequest;
 import com.ibm.caas.CAASRequestResult;
@@ -40,8 +39,8 @@ import java.util.List;
 import static com.ibm.caas.sdktest.test.TestUtils.getCurrentClassAndMethod;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -56,7 +55,7 @@ public class CAASAssetRequestTest {
     CAASService service = TestUtils.createService();
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
-    request.setPath("OOTB Content/Views/All");
+    request.setPath(TestUtils.getLibraryName() + "/Views/All");
     request.addProperties("id");
     request.addElements("cover");
     request.setPageSize(100);
@@ -69,7 +68,7 @@ public class CAASAssetRequestTest {
     String imageURL = null;
     for (CAASContentItem item: items) {
       String s = item.getElement("cover");
-      if ((s != null) && s.contains(".png")) {
+      if ((s != null) && (s.contains(".png") || s.contains(".jpg"))) {
         imageURL = s;
         break;
       }

@@ -348,7 +348,7 @@ class JSONParser {
     CAASContentItem.Property property = CAASContentItem.propertiesMap.get(name);
     if (property == null) {
       Log.w(LOG_TAG, "parseValues(name=" + name  + ", value=" + value + ") property = null");
-      return null;
+      return value;
     }
     switch(property) {
       case CREATION_DATE:
@@ -356,6 +356,8 @@ class JSONParser {
       case LAST_MODIFIED_DATE:
       case PUBLISH_DATE:
         return convertValue(value, Converter.DATE);
+      case ITEM_COUNT:
+        return convertValue(value, Converter.NUMBER);
     }
     return value;
   }

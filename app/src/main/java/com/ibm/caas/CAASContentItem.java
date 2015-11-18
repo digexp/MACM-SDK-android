@@ -22,7 +22,6 @@
 package com.ibm.caas;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +45,7 @@ public class CAASContentItem implements Serializable {
     CURRENT_STAGE("currentstage"),
     DESCRIPTION("description"),
     EXPIRY_DATE("expirydate"),
+    ITEM_COUNT("itemcount"),
     KEYWORDS("keywords"),
     LAST_MODIFIED_DATE("lastmodifieddate"),
     LAST_MODIFIER("lastmodifier"),

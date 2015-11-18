@@ -27,7 +27,6 @@ import android.test.suitebuilder.annotation.LargeTest;
 import com.ibm.caas.CAASContentItemsList;
 import com.ibm.caas.CAASContentItemsRequest;
 import com.ibm.caas.CAASErrorResult;
-import com.ibm.caas.CAASRequestResult;
 import com.ibm.caas.CAASService;
 
 import org.junit.Before;
@@ -38,6 +37,7 @@ import static com.ibm.caas.sdktest.test.TestUtils.getCurrentClassAndMethod;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -53,11 +53,15 @@ public class CAASServiceTest {
   @Test(timeout=10000)
   public void testSignInSuccess() throws Exception {
     System.out.println("in " + getCurrentClassAndMethod());
-    CAASService service = new CAASService("http://macm-mobile-nightly.rtp.raleigh.ibm.com:10039", "wps", "");
+    CAASService tmp = TestUtils.createService();
+    //CAASService service = new CAASService(tmp.getServerURL(), tmp.getContextRoot(), tmp.getInstance());
+    CAASService service = new CAASService(tmp.getServerURL(), tmp.getContextRoot(), tmp.getInstance(), tmp.getUserName(), tmp.getPassword());
     CAASDataCallbackTest<Void> callback = new CAASDataCallbackTest<Void>();
-    CAASRequestResult result = service.signIn("wpsadmin", "wpsadmin", callback);
-    result.getResult();
+    service.signIn(tmp.getUserName(), tmp.getPassword(), callback);
+    callback.awaitCompletion();
     assertTrue(callback.successful);
+    assertNull(callback.error);
+    //assertTrue("unsuccessful request: " + TestUtils.toErrorString(callback.error).replace("\n", "\\n"), callback.successful);
   }
 
   /**
@@ -66,27 +70,27 @@ public class CAASServiceTest {
   @Test(timeout=10000)
   public void testSignInFailure() throws Exception {
     System.out.println("in " + getCurrentClassAndMethod());
-    CAASService service = new CAASService("http://macm-mobile-nightly.rtp.raleigh.ibm.com:10039", "wps", "");
+    CAASService tmp = TestUtils.createService();
+    CAASService service = new CAASService(tmp.getServerURL(), tmp.getContextRoot(), tmp.getInstance());
     CAASDataCallbackTest<Void> callback = new CAASDataCallbackTest<Void>();
-    CAASRequestResult result = service.signIn("wpsadmin", "incorrect_password", callback);
-    result.getResult();
-    System.out.println("result: " + result);
+    service.signIn(tmp.getUserName(), "incorrect_password", callback);
+    callback.awaitCompletion();
+    System.out.println("result: " + callback.requestResult);
     assertFalse(callback.successful);
-    CAASErrorResult error = result.getError();
+    CAASErrorResult error = callback.error;
     System.out.println("error: "+ error);
     assertNotNull(error);
-    //assertTrue((error.getStatusCode() != -1) && (error.getStatusCode() != 200));
     assertEquals(401, error.getStatusCode());
   }
 
   @Test(timeout=10000)
   public void testAbbreviatedSignInSuccess() throws Exception {
     System.out.println("in " + getCurrentClassAndMethod());
-    CAASService service = new CAASService("http://macm-mobile-nightly.rtp.raleigh.ibm.com:10039", "wps", "", "wpsadmin", "wpsadmin");
+    CAASService service = TestUtils.createService();
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
-    request.setPath("OOTB Content/Views/All");
-    CAASRequestResult requestResult = service.executeRequest(request);
+    request.setPath(TestUtils.getLibraryName() + "/Views/All");
+    service.executeRequest(request);
     callback.awaitCompletion();
     assertTrue(callback.successful);
     assertNotNull(callback.result);
@@ -94,7 +98,6 @@ public class CAASServiceTest {
     assertNotNull(result);
     assertNotNull(result.getContentItems());
     assertFalse(result.getContentItems().isEmpty());
-    //assertFalse(
   }
 
   /**
@@ -103,11 +106,12 @@ public class CAASServiceTest {
   @Test(timeout=10000)
   public void testAbbreviatedSignInFailure() throws Exception {
     System.out.println("in " + getCurrentClassAndMethod());
-    CAASService service = new CAASService("http://macm-mobile-nightly.rtp.raleigh.ibm.com:10039", "wps", "", "wpsadmin", "incorrect_password");
+    CAASService tmp = TestUtils.createService();
+    CAASService service = new CAASService(tmp.getServerURL(), tmp.getContextRoot(), tmp.getInstance(), tmp.getUserName(), "incorrect_password");
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
-    request.setPath("OOTB Content/Views/All");
-    CAASRequestResult result = service.executeRequest(request);
+    request.setPath(TestUtils.getLibraryName() + "/Views/All");
+    service.executeRequest(request);
     callback.awaitCompletion();
     assertFalse(callback.successful);
     CAASErrorResult error = callback.error;
@@ -122,12 +126,13 @@ public class CAASServiceTest {
   @Test(timeout=10000)
   public void testHTTPSSuccess() throws Exception {
     System.out.println("in " + getCurrentClassAndMethod());
-    CAASService service = new CAASService("https://macm-mobile-nightly.rtp.raleigh.ibm.com:10042", "wps", "", "wpsadmin", "wpsadmin");
+    //CAASService service = new CAASService("https://macm-mobile-nightly.rtp.raleigh.ibm.com:10042", "wps", "", "wpsadmin", "wpsadmin");
+    CAASService service = TestUtils.createServiceHTTPS();
     service.setAllowUntrustedCertificates(true);
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
-    request.setPath("OOTB Content/Views/All");
-    CAASRequestResult requestResult = service.executeRequest(request);
+    request.setPath(TestUtils.getLibraryName() + "/Views/All");
+    service.executeRequest(request);
     callback.awaitCompletion();
     if (!callback.successful) {
       CAASErrorResult error = callback.error;
@@ -151,12 +156,12 @@ public class CAASServiceTest {
   @Test(timeout=10000, expected = javax.net.ssl.SSLHandshakeException.class)
   public void testHTTPSFailure() throws Exception {
     System.out.println("in " + getCurrentClassAndMethod());
-    CAASService service = new CAASService("https://macm-mobile-nightly.rtp.raleigh.ibm.com:10042", "wps", "", "wpsadmin", "wpsadmin");
+    CAASService service = TestUtils.createServiceHTTPS();
     service.setAllowUntrustedCertificates(false);
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
-    request.setPath("OOTB Content/Views/All");
-    CAASRequestResult requestResult = service.executeRequest(request);
+    request.setPath(TestUtils.getLibraryName() + "/Views/All");
+    service.executeRequest(request);
     callback.awaitCompletion();
     assertFalse(callback.successful);
     CAASErrorResult error = callback.error;

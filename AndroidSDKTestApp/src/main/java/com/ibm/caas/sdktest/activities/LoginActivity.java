@@ -98,7 +98,7 @@ public class LoginActivity extends Activity {
             showProgress(false);
           }
         });
-        startActivity(new Intent(LoginActivity.this.getApplicationContext(), ContentTypesActivity.class));
+        startActivity(new Intent(getApplicationContext(), ContentTypesActivity.class));
       }
 
       @Override

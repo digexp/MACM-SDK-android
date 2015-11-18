@@ -53,7 +53,7 @@ public class CAASContentItemRequestTest {
     String[] properties = { "id", "contenttype", "title", "lastmodifieddate", "categories", "keywords", "status" };
     String[] elements = { "author", "title", "publish_date", "isbn", "price", "rating", "cover" };
     CAASContentItemRequest request = new CAASContentItemRequest(callback);
-    request.setPath("OOTB Content/Content Types/Book");
+    request.setPath(TestUtils.getLibraryName() + "/Content Types/Book");
     request.addProperties(properties);
     request.addElements(elements);
     service.executeRequest(request);

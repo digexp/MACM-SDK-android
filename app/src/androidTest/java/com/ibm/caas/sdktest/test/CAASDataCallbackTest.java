@@ -29,15 +29,22 @@ import com.ibm.caas.CAASRequestResult;
  * A generic callback used for unit-testing.
  */
 public class CAASDataCallbackTest<T> implements CAASDataCallback<T> {
+  private boolean complete = false;
   boolean successful = false;
   T result;
+  CAASRequestResult<T> requestResult;
   CAASErrorResult error;
 
   @Override
-  public final void onSuccess(CAASRequestResult<T> requestResult) {
-    this.result = requestResult.getResult();
+  public final synchronized void onSuccess(CAASRequestResult<T> requestResult) {
+    System.out.println("in onSuccess()");
+    this.result = requestResult == null ? null : requestResult.getResult();
+    this.requestResult = requestResult;
     successful = true;
-    notifyCompletion();
+    synchronized(this) {
+      complete = true;
+      notifyAll();
+    }
   }
 
   @Override
@@ -45,23 +52,27 @@ public class CAASDataCallbackTest<T> implements CAASDataCallback<T> {
     //System.out.println("onError(" + error + ")");
     this.error = error;
     successful = false;
-    notifyCompletion();
-  }
-
-  synchronized void notifyCompletion() {
-    notifyAll();
+    synchronized(this) {
+      complete = true;
+      notifyAll();
+    }
   }
 
   public void awaitCompletion() {
     awaitCompletion(-1L);
   }
 
-  public synchronized void awaitCompletion(long timeout) {
-    try {
-      if (timeout <= 0L) wait();
-      else wait(timeout);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+  public void awaitCompletion(long timeout) {
+    long maxTime = timeout <= 0L ? Long.MAX_VALUE : timeout;
+    long start = System.nanoTime();
+    synchronized(this) {
+      try {
+        while (((System.nanoTime() - start) / 1000000L < maxTime) && !complete) {
+          wait(50L);
+        }
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
     }
   }
 }

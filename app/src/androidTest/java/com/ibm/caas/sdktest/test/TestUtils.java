@@ -21,7 +21,10 @@
 
 package com.ibm.caas.sdktest.test;
 
+import android.util.Log;
+
 import com.ibm.caas.CAASContentItem;
+import com.ibm.caas.CAASErrorResult;
 import com.ibm.caas.CAASService;
 
 import java.util.Random;
@@ -67,6 +70,25 @@ public class TestUtils {
   }
 
   public static CAASService createService() {
-    return new CAASService("http://macm-mobile-nightly.rtp.raleigh.ibm.com:10039", "wps", "", "wpsadmin", "wpsadmin");
+    //return new CAASService("http://macm-mobile-nightly.rtp.raleigh.ibm.com:10039", "wps", "", "wpsadmin", "wpsadmin");
+    return new CAASService("http://macm-daily-us.rtp.raleigh.ibm.com:10039", "wps", "macm1", "wpsadmin", "wpsadmin");
+  }
+
+  public static CAASService createServiceHTTPS() {
+    return new CAASService("https://macm-daily-us.rtp.raleigh.ibm.com:10041", "wps", "macm1", "wpsadmin", "wpsadmin");
+  }
+
+  public static String getLibraryName() {
+    return "Samples";
+  }
+
+  public static String toErrorString(CAASErrorResult error) {
+    if (error == null) return "null";
+    StringBuilder sb = new StringBuilder();
+    sb.append("statusCode=").append(error.getStatusCode());
+    sb.append(", message=").append(error.getMessage());
+    Throwable t = error.getException();
+    sb.append(", exception=").append(t == null ? "null" : Log.getStackTraceString(t));
+    return sb.toString();
   }
 }

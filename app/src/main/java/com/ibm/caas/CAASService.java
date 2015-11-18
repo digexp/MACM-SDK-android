@@ -273,13 +273,16 @@ public class CAASService {
             requestResult.setError(error);
             callback.onError(error);
           } else {
-            callback.onSuccess(null);
+            callback.onSuccess(requestResult);
           }
         } catch (Exception e) {
           Log.e(LOG_TAG, "error authenticating: " + e.getClass().getName() + " " + Log.getStackTraceString(e));
           CAASErrorResult error = new CAASErrorResult(statusCode, e, Utils.localize("com.ibm.caas.authFailure", statusCode));
           requestResult.setError(error);
           callback.onError(error);
+        } catch (Error e) {
+          Log.e(LOG_TAG, "system error : ", e);
+          throw e;
         }
         return requestResult;
       }
