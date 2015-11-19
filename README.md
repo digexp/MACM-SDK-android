@@ -199,15 +199,12 @@ CAASDataCallback<byte[]> callback = new CAASDataCallback<byte[]>() {
   @Override
   public void onSuccess(CAASRequestResult<byte[]> requestResult) {
     // get the Content-Type response header
-    List<String> values = requestResult.getResponseHeaders().get("Content-Type");
-    if ((values != null) && !values.isEmpty()) {
-      String contentType = values.get(0);
-      // if we have an image content type, build a Bitmap object from the raw data
-      if ((contentType != null) && contentType.startsWith("image")) {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
-        imageView.setImageDrawable(drawable);
-      }
+    String contentType = requestResult.getHttpURLConnection().getHeaderField("Content-Type");
+    // if we have an image content type, build a Bitmap object from the raw data
+    if ((contentType != null) && contentType.startsWith("image")) {
+      Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+      BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
+      imageView.setImageDrawable(drawable);
     }
   }
 

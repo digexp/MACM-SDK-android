@@ -64,8 +64,7 @@ public class ItemListAdapter extends ArrayAdapter<CAASContentItem> {
     //URL imageURL = items.get(position).getElement("cover");
     CAASContentItem item = items.get(position);
     String imageURL = item.getElement("cover");
-    boolean displayImages = true;
-    if ((imageURL != null) && displayImages) {
+    if (imageURL != null) {
       CAASService service = GenericCache.getInstance().get(Constants.SERVER);
       Log.v(LOG_TAG, "getView(): title='" + item.getTitle() + "', imageURL='" + imageURL + "', server url='" + service.getServerURL() + "'");
       final String fullURL = service.getServerURL() + imageURL.toString();
@@ -74,15 +73,12 @@ public class ItemListAdapter extends ArrayAdapter<CAASContentItem> {
         CAASDataCallback<byte[]> callback = new CAASDataCallback<byte[]>() {
           @Override
           public void onSuccess(CAASRequestResult<byte[]> requestResult) {
-            List<String> values = requestResult.getResponseHeaders().get("Content-Type");
-            if ((values != null) && !values.isEmpty()) {
-              String contentType = values.get(0);
-              if ((contentType != null) && contentType.startsWith("image")) {
-                byte[] bytes = requestResult.getResult();
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                GenericCache.getInstance().put(fullURL, bitmap); // cache the image
-                setDrawable(imageView, bitmap);
-              }
+            String contentType = requestResult.getHttpURLConnection().getHeaderField("Content-Type");
+            if ((contentType != null) && contentType.startsWith("image")) {
+              byte[] bytes = requestResult.getResult();
+              Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+              GenericCache.getInstance().put(fullURL, bitmap); // cache the image
+              setDrawable(imageView, bitmap);
             }
           }
 

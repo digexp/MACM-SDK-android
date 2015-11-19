@@ -21,6 +21,8 @@
 
 package com.ibm.caas;
 
+import java.net.HttpURLConnection;
+
 /**
  * Encapsulates the error result of a failed query.
  */
@@ -37,17 +39,23 @@ public class CAASErrorResult {
    * The error message, if any.
    */
   private final String message;
+  /**
+   * The URL connection used to send the request and receive the response.
+   */
+  private final HttpURLConnection httpURLConnection;
 
   /**
    * Initialize this error result with the specified status code, optional exception and error message.
    * @param statusCode the HTTP status code from the HTTP response.
    * @param exception an optional exception that was raised while executing the reqquest.
    * @param message the error message.
+   * @param httpURLConnection the URL connection used to send the request and receive the response.
    */
-  public CAASErrorResult(int statusCode, Exception exception, String message) {
+  CAASErrorResult(int statusCode, Exception exception, String message, HttpURLConnection httpURLConnection) {
     this.statusCode = statusCode;
     this.exception = exception;
     this.message = message;
+    this.httpURLConnection = httpURLConnection;
   }
 
   /**
@@ -70,5 +78,13 @@ public class CAASErrorResult {
    */
   public String getMessage() {
     return message;
+  }
+
+  /**
+   * Get the URL connection used to send the request and receive the response.
+   * @return an {@link HttpURLConnection} instance.
+   */
+  public HttpURLConnection getHttpURLConnection() {
+    return httpURLConnection;
   }
 }

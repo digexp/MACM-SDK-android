@@ -262,6 +262,8 @@ public class CAASService {
     //Log.d(LOG_TAG, "BuildConfig.DEBUG = " + BuildConfig.DEBUG);
     final CAASRequestResult<Void> requestResult = new CAASRequestResult<Void>(null);
     AsyncTask<Void, Void, CAASRequestResult<Void>> task = new AsyncTask<Void, Void, CAASRequestResult<Void>>() {
+      private HttpURLConnection connection;
+
       @Override
       protected CAASRequestResult<Void> doInBackground(Void... params) {
         int statusCode = -1;
@@ -269,15 +271,16 @@ public class CAASService {
           Log.d(LOG_TAG, "attempting with USE_AUTHENTICATOR = " + USE_AUTHENTICATOR);
           statusCode = authenticateSync();
           if ((statusCode >= 400) && (statusCode != 404)) {
-            CAASErrorResult error = new CAASErrorResult(statusCode, null, Utils.localize("com.ibm.caas.authFailure", statusCode));
+            CAASErrorResult error = new CAASErrorResult(statusCode, null, Utils.localize("com.ibm.caas.authFailure", statusCode), connection);
             requestResult.setError(error);
             callback.onError(error);
           } else {
+            requestResult.setHttpURLConnection(connection);
             callback.onSuccess(requestResult);
           }
         } catch (Exception e) {
           Log.e(LOG_TAG, "error authenticating: " + e.getClass().getName() + " " + Log.getStackTraceString(e));
-          CAASErrorResult error = new CAASErrorResult(statusCode, e, Utils.localize("com.ibm.caas.authFailure", statusCode));
+          CAASErrorResult error = new CAASErrorResult(statusCode, e, Utils.localize("com.ibm.caas.authFailure", statusCode), connection);
           requestResult.setError(error);
           callback.onError(error);
         } catch (Error e) {
@@ -286,45 +289,45 @@ public class CAASService {
         }
         return requestResult;
       }
+
+      /**
+       * Perform basic auth synchronously.
+       * This method should always be called from an <code>AsyncTask</code>.
+       * @return the HTTP response code for the authentication request.
+       * @throws Exception if any error occurs.
+       */
+      private int authenticateSync() throws Exception {
+        int statusCode = -1;
+        CookieHandler tmpManager = CookieHandler.getDefault();
+        try {
+          URL url = new URL(getBasicAuthenticationURI().toString());
+          manager = new CookieManager();
+          manager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
+          CookieHandler.setDefault(manager);
+          connection = handleConnection((HttpURLConnection) url.openConnection());
+          Log.d(LOG_TAG, "authenticateSync() url = " + connection.getURL());
+          connection.setInstanceFollowRedirects(true);
+          connection.setDoInput(true);
+          connection.setRequestMethod("POST");
+          if (!USE_AUTHENTICATOR) {
+            setBasicAuthHeader(connection);
+          }
+          setUserAgentHeader(connection);
+          try {
+            statusCode = connection.getResponseCode();
+          } catch(IOException e) {
+            statusCode = connection.getResponseCode();
+          }
+          logResponseHeaders(connection);
+        } finally {
+          CookieHandler.setDefault(tmpManager);
+        }
+        return statusCode;
+      }
     };
     requestResult.setAsyncTask(task);
     task.execute();
     return requestResult;
-  }
-
-  /**
-   * Perform basic auth synchronously.
-   * This method should always be called from an <code>AsyncTask</code>.
-   * @return the HTTP response code for the authentication request.
-   * @throws Exception if any error occurs.
-   */
-  private int authenticateSync() throws Exception {
-    int statusCode = -1;
-    CookieHandler tmpManager = CookieHandler.getDefault();
-    try {
-      URL url = new URL(getBasicAuthenticationURI().toString());
-      manager = new CookieManager();
-      manager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
-      CookieHandler.setDefault(manager);
-      HttpURLConnection connection = handleConnection((HttpURLConnection) url.openConnection());
-      Log.d(LOG_TAG, "authenticateSync() url = " + connection.getURL());
-      connection.setInstanceFollowRedirects(true);
-      connection.setDoInput(true);
-      connection.setRequestMethod("POST");
-      if (!USE_AUTHENTICATOR) {
-        setBasicAuthHeader(connection);
-      }
-      setUserAgentHeader(connection);
-      try {
-        statusCode = connection.getResponseCode();
-      } catch(IOException e) {
-        statusCode = connection.getResponseCode();
-      }
-      logResponseHeaders(connection);
-    } finally {
-      CookieHandler.setDefault(tmpManager);
-    }
-    return statusCode;
   }
 
   /**
@@ -626,6 +629,7 @@ public class CAASService {
       boolean reauthenticationRequired = false;
       boolean done = false;
       CookieHandler tmpManager = CookieHandler.getDefault();
+      HttpURLConnection connection = null;
       try {
         CookieHandler.setDefault(manager);
         StringBuilder sb = new StringBuilder();
@@ -638,7 +642,7 @@ public class CAASService {
         }
         URL url = new URL(sb.toString());
         while (!done) {
-          HttpURLConnection connection = handleConnection((HttpURLConnection) url.openConnection());
+          connection = handleConnection((HttpURLConnection) url.openConnection());
           connection.setRequestProperty(Utils.HTTP_HEADER_ACCEPT_LANGUAGE, Locale.getDefault().toString());
           setUserAgentHeader(connection);
           Log.d(LOG_TAG, "request url = " + connection.getURL());
@@ -663,7 +667,7 @@ public class CAASService {
             performanceHook.newTime(time / 1000000d);
             logResponseHeaders(connection);
           }
-          requestResult.setResponseHeaders(connection.getHeaderFields());
+          requestResult.setHttpURLConnection(connection);
           if (statusCode != 200) {
             CAASErrorResult error;
             logErrorBody(connection);
@@ -673,7 +677,7 @@ public class CAASService {
               reauthenticationRequired = true;
               continue;
             } else {
-              error = new CAASErrorResult(statusCode, null, Utils.localize("com.ibm.caas.queryFailure", url));
+              error = new CAASErrorResult(statusCode, null, Utils.localize("com.ibm.caas.queryFailure", url), connection);
             }
             requestResult.setError(error);
             return requestResult;
@@ -690,7 +694,7 @@ public class CAASService {
           requestResult.setResult(result);
         }
       } catch(Exception e) {
-        CAASErrorResult error = new CAASErrorResult(statusCode, e, e.getMessage());
+        CAASErrorResult error = new CAASErrorResult(statusCode, e, e.getMessage(), connection);
         requestResult.setError(error);
       } finally {
         CookieHandler.setDefault(tmpManager);

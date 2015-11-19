@@ -23,9 +23,7 @@ package com.ibm.caas;
 
 import android.os.AsyncTask;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.HttpURLConnection;
 
 /**
  * Encapsulates the result of a request.
@@ -49,13 +47,13 @@ public class CAASRequestResult<C> {
    */
   private String contentType;
   /**
-   * The headers of the HTTP response sent by the MACM server.
-   */
-  private final Map<String, List<String>> responseHeaders = new HashMap<String, List<String>>();
-  /**
    * The task which executes the request asynchronously.
    */
   private AsyncTask<Void, Void, CAASRequestResult<C>> asyncTask;
+  /**
+   * The URL connection used to send the request and receive the response.
+   */
+  private HttpURLConnection httpURLConnection;
 
   CAASRequestResult(CAASRequest<C> request) {
     this.request = request;
@@ -80,20 +78,19 @@ public class CAASRequestResult<C> {
   }
 
   /**
-   * Get the headers of the HTTP response sent by the MACM server.
-   * @return a mmaping of header names to the corresponding lists of values.
+   * Get the URL connection used to send the request and receive the response.
+   * @return an {@link HttpURLConnection} instance.
    */
-  public Map<String, List<String>> getResponseHeaders() {
-    return responseHeaders;
+  public HttpURLConnection getHttpURLConnection() {
+    return httpURLConnection;
   }
 
   /**
-   * Set the headers of the HTTP response sent by the MACM server.
-   * @param headers a mmaping of header names to the corresponding lists of values.
+   * Set the URL connection used to send the request and receive the response.
+   * @param httpURLConnection an {@link HttpURLConnection} instance.
    */
-  void setResponseHeaders(Map<String, List<String>> headers) {
-    responseHeaders.clear();
-    if (headers != null) responseHeaders.putAll(headers);
+  void setHttpURLConnection(HttpURLConnection httpURLConnection) {
+    this.httpURLConnection = httpURLConnection;
   }
 
   /**
@@ -126,7 +123,7 @@ public class CAASRequestResult<C> {
         }
       } catch(Exception e) {
         if (error == null) {
-          error = new CAASErrorResult(-1, e, e.getMessage());
+          error = new CAASErrorResult(-1, e, e.getMessage(), null);
         }
       }
     }
