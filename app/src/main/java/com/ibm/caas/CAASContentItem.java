@@ -343,6 +343,13 @@ public class CAASContentItem implements Serializable {
 
   /**
    * Get the value of this content item's element
+   * <p>The returned value type is one of the following, depending on which element is looked up:
+   * <ul>
+   *   <li>number values: <code>double</code> or <code>java.lang.Double</code></li>
+   *   <li>string values: <code>java.lang.String</code></li>
+   *   <li>date values: <code>java.util.Date</code></li>
+   *   <li>url values: <code>java.lang.String</code></li>
+   * </ul>
    * @param name the name of the element to retrieve.
    * @param <T> the type of the element's value.
    * @return the element's value or <code>null</code> if the element is not defined.
@@ -353,6 +360,13 @@ public class CAASContentItem implements Serializable {
 
   /**
    * Get the value of this content item's property.
+   * <p>The returned value type is one of the following, depending on which property is looked up:
+   * <ul>
+   *   <li>number values: <code>double</code> or <code>java.lang.Double</code></li>
+   *   <li>string values: <code>java.lang.String</code></li>
+   *   <li>date values: <code>java.util.Date</code></li>
+   *   <li>url values: <code>java.lang.String</code></li>
+   * </ul>
    * @param name the name of the property to retrieve.
    * @param <T> the type of the property's value.
    * @return the property's value or <code>null</code> if the property is not defined.
