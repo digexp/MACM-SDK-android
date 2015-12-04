@@ -31,17 +31,6 @@ import java.util.List;
  */
 abstract class CAASAbstractContentRequest<C> extends CAASRequest<C> {
   /**
-   * The set of supported properties.
-   */
-  /*
-  private static final Set<String> SUPPORTED_PROPERTIES = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
-    "authtemplateid", "authtemplatename", "authtemplatetitle", "authors", "categories", "creationdate",
-    "creator", "currentstage", "description", "expirydate", "id", "keywords", "lastmodifieddate",
-    "lastmodifier", "libraryid", "libraryname", "librarytitle", "name", "parentid", "parentname",
-    "parenttitle", "projectid", "projectname", "projecttitle", "publishdate", "status", "statusid", "title", "contenttype"
-  )));
-  */
-  /**
    * Additional arbitrary parameters that can be added to the query.
    */
   final List<QueryParameter> parameters = new ArrayList<QueryParameter>();
@@ -76,6 +65,7 @@ abstract class CAASAbstractContentRequest<C> extends CAASRequest<C> {
 
   /**
    * Get the <code>path</code> of the content item(s) to retrieve.
+   * <p><b>See also</b>: <a href="http://www-01.ibm.com/support/knowledgecenter/SSYK7J_8.5.0/macm/macm_rest_api_sys_cont_items.dita">MACM path structure</a> in the IBM Knowledge Center for MACM.
    * @return the path string.
    */
   public String getPath() {
@@ -85,6 +75,7 @@ abstract class CAASAbstractContentRequest<C> extends CAASRequest<C> {
   /**
    * Set the <code>path</code> of the content item(s) to retrieve.
    * The <code>path</code> is mutually exclusive with the {@link #setOid(String) oid}, therefore this method resets the <code>oid</code> to <code>null</code>.
+   * <p><b>See also</b>: <a href="http://www-01.ibm.com/support/knowledgecenter/SSYK7J_8.5.0/macm/macm_rest_api_sys_cont_items.dita">MACM path structure</a> in the IBM Knowledge Center for MACM.
    * @param path the path string.
    */
   public void setPath(String path) {
@@ -141,6 +132,7 @@ abstract class CAASAbstractContentRequest<C> extends CAASRequest<C> {
 
   /**
    * Get the properties to be served.
+   * <p><b>See also</b>: {@link CAASProperties supported properties}.
    * @return an unmodifiable list of the properties to be served by this request.
    */
   public List<String> getProperties() {
@@ -149,23 +141,9 @@ abstract class CAASAbstractContentRequest<C> extends CAASRequest<C> {
 
   /**
    * Only serve the specified properties.
-   * <p>The supported properties are: <i>authtemplateid, authtemplatename, authtemplatetitle, authors, categories,
-   * creationdate, creator, currentstage, description, expirydate, id, keywords, lastmodifieddate, lastmodifier,
-   * libraryid, libraryname, librarytitle, name, parentid, parentname, parenttitle, projectid, projectname,
-   * projecttitle, publishdate, status, statusid, title, contenttype</i>.
+   * <p><b>See also</b>: {@link CAASProperties supported properties}.
    */
   public void addProperties(String... properties) {
-    /*
-    List<String> inError = new ArrayList<String>();
-    for (String property: properties) {
-      if (!SUPPORTED_PROPERTIES.contains(property)) {
-        inError.add(property);
-      }
-    }
-    if (!inError.isEmpty()) {
-      throw new IllegalArgumentException(String.format("unsupported propert%s specified: %s", (inError.size() == 1 ? "y" : "ies"), asCsv(inError)));
-    }
-    */
     this.properties.addAll(Arrays.asList(properties));
   }
 

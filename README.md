@@ -17,6 +17,10 @@ The Android SDK is an Android API to retrieve content from a MACM server.
         3. [Single content item by id](#querying-a-single-content-item-by-id)
         4. [Single content item by path](#querying-a-single-content-item-by-path)
     3. [Querying an asset (image) by its url](#querying-an-asset-image-by-its-url)
+    4. [Project-related queries](#project-related-queries)
+        1. [View all open projects](#view-all-open-projects)
+        2. [Accessing draft content in project scope](#accessing-draft-content-in-project-scope)
+
 3. [Miscellaneous](#miscellaneous)
     1. [Allowing untrusted certificates for HTTPS connections](#allowing-untrusted-certificates-with-https-connections)
     2. [Enabling geo-location retrieval](#enabling-geo-location-retrieval)
@@ -58,7 +62,7 @@ The username and password are hardcoded in the application and the following con
 
 ```java
 // create a service instance with application credentials
-CAASService service = new CAASService("http://www.myhost.com:10039", "MyContextRoot", "MyTenant", "username", "password");
+CAASService service = new CAASService("https://macm-rendering.saas.ibmcloud.com", "wps", "vp1234", "username", "password");
 ```
 
 #### Authentication with the credentials of the end user
@@ -67,7 +71,7 @@ CAASService service = new CAASService("http://www.myhost.com:10039", "MyContextR
 
 ```java
 // create a service instance without credentials
-CAASService service = new CAASService("http://www.myhost.com:10039", "MyContextRoot", "MyTenant");
+CAASService service = new CAASService("https://macm-rendering.saas.ibmcloud.com", "wps", "vp1234");
 ```
 
 * When the users provide their credentials, the following API checks these credentials against the MACM server:
@@ -94,7 +98,7 @@ service.signIn("username", "password", callback);
 
 ```java
 // create the service that connects to the MACM instance
-CAASService service = new CAASService("http://www.myhost.com:10039", "MyContextRoot", "MyTenant", "username", "password");
+CAASService service = new CAASService("https://macm-rendering.saas.ibmcloud.com", "wps", "vp1234", "username", "password");
 // handle the request result asynchronously
 CAASDataCallback<CAASContentItemsList> callback = new CAASDataCallback<CAASContentItemsList>() {
   @Override
@@ -111,9 +115,10 @@ CAASDataCallback<CAASContentItemsList> callback = new CAASDataCallback<CAASConte
 };
 // create the request
 CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
-request.setPath("MACM/Content Types/Book"); // path to "Book" content items
+request.setPath("Samples/Content Types/Book"); // path to "Book" content items
 // include the specified properties in the response
-request.addProperties("id", "contenttype", "title", "lastmodifieddate", "categories", "keywords");
+request.addProperties(CAASProperties.OIS, CAASProperties.CONTENT_TYPE, CAASProperties.TITLE,
+  CAASProperties.LAST_MODIFIED_DATE, CAASProperties.CATEGORIES, CAASProperties.KEYWORDS);
 // request the url to the cover image
 request.addElements("cover");
 // request the first 10 items
@@ -127,7 +132,7 @@ service.executeRequest(request);
 
 ```java
 // creates the service that connects to the MACM instance
-CAASService service = new CAASService("http://www.myhost.com:10039", "MyContextRoot", "MyTenant", "username", "password");
+CAASService service = new CAASService("https://macm-rendering.saas.ibmcloud.com", "wps", "vp1234", "username", "password");
 // handle the request result asynchronously
 CAASDataCallback<CAASContentItemsList> callback = ...;
 // create the request
@@ -148,7 +153,7 @@ service.executeRequest(request);
 
 ```java
 // creates the service that connects to the MACM instance
-CAASService service = new CAASService("http://www.myhost.com:10039", "MyContextRoot", "MyTenant", "username", "password");
+CAASService service = new CAASService("https://macm-rendering.saas.ibmcloud.com", "wps", "vp1234", "username", "password");
 // handle the request result asynchronously
 CAASDataCallback<CAASContentItem> callback = new CAASDataCallback<CAASContentItem>() {
   @Override
@@ -175,11 +180,11 @@ service.executeRequest(request);
 
 ```java
 // create the service that connects to the MACM instance
-CAASService service = new CAASService("http://www.myhost.com:10039", "MyContextRoot", "MyTenant", "username", "password");
+CAASService service = new CAASService("https://macm-rendering.saas.ibmcloud.com", "wps", "vp1234", "username", "password");
 CAASDataCallback<CAASContentItem> callback = ...;
 // create the request
 CAASContentItemRequest request = new CAASContentItemRequest(callback);
-request.setPath("MACM/some/content item path");
+request.setPath("Samples/some/content item path");
 // execute the request
 service.executeRequest(request);
 ```
@@ -217,6 +222,46 @@ CAASAssetRequest request = new CAASAssetRequest(url, callback);
 service.executeRequest(request);
 ```
 
+## Project-related queries
+### View all open projects
+
+```java
+CAASService service = ...;
+// handle the request result asynchronously
+CAASDataCallback<CAASContentItemsList> callback = new CAASDataCallback<CAASContentItemsList>() {
+  @Override
+  public void onSuccess(CAASRequestResult<CAASContentItemsList> requestResult) {
+    CAASContentItemsList projectsList = requestResult.getResult();
+    List<CAASContentItem> projects = projectsList.getContentItems();
+    // do something with the list of projects
+  }
+
+  @Override
+  public void onError(CAASErrorResult error) {
+    // handle the error
+  }
+};
+// create the request
+CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
+// open projects are always in the "MACM System" library
+request.setPath("MACM System/Views/Open Projects");
+// include the specified properties in the response
+request.addProperties(CAASProperties.UUID, CAASProperties.ITEM_COUNT, CAASProperties.TITLE, CAASProperties.LAST_MODIFIED_DATE);
+service.executeRequest(request);
+```
+
+### Accessing draft content in project scope
+
+```java
+CAASService service = ...;
+CAASDataCallback<CAASContentItemsList> callback = ...;
+CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
+request.setPath("Samples/Views/All");
+// set the project scope
+request.setProject("MyProject");
+service.executeRequest(request);
+```
+
 ## Miscellaneous
 ### Allowing untrusted certificates with HTTPS connections
 
@@ -226,7 +271,7 @@ flag must be set to `true', as follows:
 
 ```java
 // create the service that connects to the MACM instance
-CAASService service = new CAASService("https://www.myhost.com:10042", "MyContextRoot", "MyTenant", "username", "password");
+CAASService service = new CAASService("https://macm-rendering.saas.ibmcloud.com", "wps", "vp1234", "username", "password");
 service.setAllowUntrustedCertificates(true);
 ...
 ```
@@ -241,7 +286,7 @@ public class MyActivity extends Activity {
   ...
 
   public void doLogin() {
-    CAASService service = new CAASService("http://www.myhost.com:10039", "MyContextRoot", "MyTenant", "user", "password");
+    CAASService service = new CAASService("https://macm-rendering.saas.ibmcloud.com", "wps", "vp1234", "username", "password");
     service.setAndroidContext(getApplicationContext());
     ...;
   }

@@ -26,13 +26,13 @@ import android.test.suitebuilder.annotation.LargeTest;
 
 import com.ibm.caas.CAASContentItem;
 import com.ibm.caas.CAASContentItemRequest;
-import com.ibm.caas.CAASRequestResult;
 import com.ibm.caas.CAASService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.ibm.caas.sdktest.test.TestUtils.getCurrentClassAndMethod;
+import static com.ibm.caas.CAASProperties.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -50,7 +50,7 @@ public class CAASContentItemRequestTest {
     System.out.println("in " + getCurrentClassAndMethod());
     CAASService service = TestUtils.createService();
     CAASDataCallbackTest<CAASContentItem> callback = new CAASDataCallbackTest<CAASContentItem>();
-    String[] properties = { "id", "contenttype", "title", "lastmodifieddate", "categories", "keywords", "status" };
+    String[] properties = { OID, CONTENT_TYPE, TITLE, LAST_MODIFIED_DATE, CATEGORIES, KEYWORDS, STATUS };
     String[] elements = { "author", "title", "publish_date", "isbn", "price", "rating", "cover" };
     CAASContentItemRequest request = new CAASContentItemRequest(callback);
     request.setPath(TestUtils.getLibraryName() + "/Content Types/Book");
@@ -85,11 +85,11 @@ public class CAASContentItemRequestTest {
     System.out.println("in " + getCurrentClassAndMethod());
     CAASService service = TestUtils.createService();
     CAASDataCallbackTest<CAASContentItem> callback = new CAASDataCallbackTest<CAASContentItem>();
-    String[] properties = { "id", "contenttype", "title", "lastmodifieddate", "categories", "keywords" };
+    String[] properties = { OID, CONTENT_TYPE, TITLE, LAST_MODIFIED_DATE, CATEGORIES, KEYWORDS};
     CAASContentItemRequest request = new CAASContentItemRequest(callback);
     request.setOid(TestUtils.generateRandomString(32));
     request.addProperties(properties);
-    CAASRequestResult<CAASContentItem> requestResult = service.executeRequest(request);
+    service.executeRequest(request);
     callback.awaitCompletion();
     assertFalse(callback.successful);
     assertNull(callback.result);

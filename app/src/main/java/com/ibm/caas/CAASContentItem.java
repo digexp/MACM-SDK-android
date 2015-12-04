@@ -349,6 +349,7 @@ public class CAASContentItem implements Serializable {
    *   <li>string values: <code>java.lang.String</code></li>
    *   <li>date values: <code>java.util.Date</code></li>
    *   <li>url values: <code>java.lang.String</code></li>
+   *   <li>html values: <code>java.lang.String</code></li>
    * </ul>
    * @param name the name of the element to retrieve.
    * @param <T> the type of the element's value.
@@ -366,6 +367,7 @@ public class CAASContentItem implements Serializable {
    *   <li>string values: <code>java.lang.String</code></li>
    *   <li>date values: <code>java.util.Date</code></li>
    *   <li>url values: <code>java.lang.String</code></li>
+   *   <li>html values: <code>java.lang.String</code></li>
    * </ul>
    * @param name the name of the property to retrieve.
    * @param <T> the type of the property's value.

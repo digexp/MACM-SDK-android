@@ -28,7 +28,6 @@ import android.util.Log;
 import com.ibm.caas.CAASContentItem;
 import com.ibm.caas.CAASContentItemsList;
 import com.ibm.caas.CAASContentItemsRequest;
-import com.ibm.caas.CAASRequestResult;
 import com.ibm.caas.CAASService;
 
 import org.junit.Test;
@@ -39,13 +38,11 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import static com.ibm.caas.sdktest.test.TestUtils.getCurrentClassAndMethod;
+import static com.ibm.caas.CAASProperties.*;
 import static com.ibm.caas.sdktest.test.TestUtils.itemsEqual;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -69,7 +66,7 @@ public class CAASContentItemsRequestTest {
     request.setPath(TestUtils.getLibraryName() + "/Views/All");
     request.setPageSize(100);
     request.setPageNumber(1);
-    CAASRequestResult requestResult = service.executeRequest(request);
+    service.executeRequest(request);
     callback.awaitCompletion();
     assertTrue(callback.successful);
     assertNotNull(callback.result);
@@ -147,9 +144,9 @@ public class CAASContentItemsRequestTest {
     request.setPath("MACM System/Views/Open Projects");
     request.setPageSize(100);
     request.setPageNumber(1);
-    String[] properties = {"creationdate", "itemcount", "name", "state", "title", "uuid"};
+    String[] properties = {CREATION_DATE, ITEM_COUNT, NAME, STATE, TITLE, UUID};
     request.addProperties(properties);
-    CAASRequestResult requestResult = service.executeRequest(request);
+    service.executeRequest(request);
     callback.awaitCompletion();
     assertTrue(callback.successful);
     assertNotNull(callback.result);
@@ -202,7 +199,7 @@ public class CAASContentItemsRequestTest {
     request.setPath(TestUtils.getLibraryName() + "/Views/My Approvals");
     request.setPageSize(100);
     request.setPageNumber(1);
-    CAASRequestResult requestResult = service.executeRequest(request);
+    service.executeRequest(request);
     callback.awaitCompletion();
     assertTrue(callback.successful);
     assertNotNull(callback.result);
@@ -255,13 +252,12 @@ public class CAASContentItemsRequestTest {
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
     request.setPath(TestUtils.getLibraryName() + "/Views/All");
-    String sortCriteria = "title";
-    request.addProperties("id");
-    request.addProperties(sortCriteria);
+    String sortCriteria = TITLE;
+    request.addProperties(OID, sortCriteria);
     request.setPageSize(100);
     request.setPageNumber(1);
     // sort by categories ascending, then title descending
-    request.addSortDescriptor("title", true);
+    request.addSortDescriptor(sortCriteria, true);
     service.executeRequest(request);
     callback.awaitCompletion();
     assertTrue(callback.successful);
@@ -270,7 +266,6 @@ public class CAASContentItemsRequestTest {
     List<CAASContentItem> items = result.getContentItems();
     assertNotNull(items);
     assertFalse(items.isEmpty());
-    ContentItemComparator titleComparator = new ContentItemComparator(sortCriteria, false);
     SortedMap<String, CAASContentItem> map = new TreeMap<String, CAASContentItem>();
     for (CAASContentItem item: items) {
       String contentType = item.getProperty(sortCriteria);
@@ -290,7 +285,7 @@ public class CAASContentItemsRequestTest {
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
     request.setPath(TestUtils.getLibraryName() + "/Views/All");
-    request.addProperties("id", "contenttype", "title", "lastmodifieddate", "categories", "keywords");
+    request.addProperties(OID, CONTENT_TYPE, TITLE, LAST_MODIFIED_DATE, CATEGORIES, KEYWORDS);
     request.setPageSize(100);
     request.setPageNumber(1);
     String[] categories = {"samples/macm/books/biography"};
@@ -317,12 +312,12 @@ public class CAASContentItemsRequestTest {
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
     request.setPath(TestUtils.getLibraryName() + "/Views/All");
-    request.addProperties("id", "contenttype", "title", "lastmodifieddate", "categories", "keywords");
+    request.addProperties(OID, CONTENT_TYPE, TITLE, LAST_MODIFIED_DATE, CATEGORIES, KEYWORDS);
     request.setPageSize(100);
     request.setPageNumber(1);
     String[] categories = {"samples/macm/books/biography", "samples/macm/books/textbook"};
     request.addAnyCategories(categories);
-    CAASRequestResult requestResult = service.executeRequest(request);
+    service.executeRequest(request);
     callback.awaitCompletion();
     assertTrue(callback.successful);
     assertNotNull(callback.result);
@@ -347,12 +342,12 @@ public class CAASContentItemsRequestTest {
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
     request.setPath(TestUtils.getLibraryName() + "/Views/All");
-    request.addProperties("id", "contenttype", "title", "lastmodifieddate", "categories", "keywords");
+    request.addProperties(OID, CONTENT_TYPE, TITLE, LAST_MODIFIED_DATE, CATEGORIES, KEYWORDS);
     request.setPageSize(100);
     request.setPageNumber(1);
     String[] keywords = {"bestseller", "special_offer"};
     request.addAllKeywords(keywords);
-    CAASRequestResult requestResult = service.executeRequest(request);
+    service.executeRequest(request);
     callback.awaitCompletion();
     assertTrue(callback.successful);
     assertNotNull(callback.result);
@@ -374,12 +369,12 @@ public class CAASContentItemsRequestTest {
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
     request.setPath(TestUtils.getLibraryName() + "/Views/All");
-    request.addProperties("id", "contenttype", "title", "lastmodifieddate", "categories", "keywords");
+    request.addProperties(OID, CONTENT_TYPE, TITLE, LAST_MODIFIED_DATE, CATEGORIES, KEYWORDS);
     request.setPageSize(100);
     request.setPageNumber(1);
     String[] keywords = {"bestseller", "special_offer"};
     request.addAnyKeywords(keywords);
-    CAASRequestResult requestResult = service.executeRequest(request);
+    service.executeRequest(request);
     callback.awaitCompletion();
     assertTrue(callback.successful);
     assertNotNull(callback.result);
@@ -404,7 +399,7 @@ public class CAASContentItemsRequestTest {
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
     request.setPath(TestUtils.getLibraryName() + "/Views/All");
-    request.addProperties("id", "contenttype", "title");
+    request.addProperties(OID, CONTENT_TYPE, TITLE);
     request.setPageSize(100);
     request.setPageNumber(1);
     String partialTitle = "Lives";
@@ -435,7 +430,7 @@ public class CAASContentItemsRequestTest {
     CAASDataCallbackTest<CAASContentItemsList> initCallback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest initRequest = new CAASContentItemsRequest(initCallback);
     initRequest.setPath(TestUtils.getLibraryName() + "/Views/All");
-    initRequest.addProperties("id", "contenttype", "title", "status");
+    initRequest.addProperties(OID, CONTENT_TYPE, TITLE, STATUS);
     initRequest.setPageSize(100);
     initRequest.setPageNumber(1);
     service.executeRequest(initRequest);
@@ -454,10 +449,11 @@ public class CAASContentItemsRequestTest {
       CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
       request.setPath(TestUtils.getLibraryName() + "/Views/All");
       request.addProperties("id", "contenttype", "title", "status");
+      request.addProperties(OID, CONTENT_TYPE, TITLE, STATUS);
       request.setPageSize(100);
       request.setPageNumber(1);
       request.setWorkflowStatus(status);
-      CAASRequestResult requestResult = service.executeRequest(request);
+      service.executeRequest(request);
       callback.awaitCompletion();
       assertTrue(callback.successful);
       assertNotNull(callback.result);
@@ -481,11 +477,10 @@ public class CAASContentItemsRequestTest {
       CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
       CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
       request.setPath(TestUtils.getLibraryName() + "/Views/All");
-      request.addProperties("id", "contenttype", "title", "status");
-      Random rand = new Random(System.nanoTime());
+      request.addProperties(OID, CONTENT_TYPE, TITLE, STATUS);
       // build a random string and add a filter on the title name with this string to ensure no item is found
       request.setTitleContains(TestUtils.generateRandomString(50));
-      CAASRequestResult requestResult = service.executeRequest(request);
+      service.executeRequest(request);
       callback.awaitCompletion();
       assertTrue(callback.successful);
       assertNotNull(callback.result);

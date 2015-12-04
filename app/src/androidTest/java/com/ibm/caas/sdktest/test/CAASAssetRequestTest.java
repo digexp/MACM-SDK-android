@@ -37,6 +37,7 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 import static com.ibm.caas.sdktest.test.TestUtils.getCurrentClassAndMethod;
+import static com.ibm.caas.CAASProperties.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -56,7 +57,7 @@ public class CAASAssetRequestTest {
     CAASDataCallbackTest<CAASContentItemsList> callback = new CAASDataCallbackTest<CAASContentItemsList>();
     CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
     request.setPath(TestUtils.getLibraryName() + "/Views/All");
-    request.addProperties("id");
+    request.addProperties(OID);
     request.addElements("cover");
     request.setPageSize(100);
     request.setPageNumber(1);

@@ -67,7 +67,7 @@ public class ItemListAdapter extends ArrayAdapter<CAASContentItem> {
     if (imageURL != null) {
       CAASService service = GenericCache.getInstance().get(Constants.SERVER);
       Log.v(LOG_TAG, "getView(): title='" + item.getTitle() + "', imageURL='" + imageURL + "', server url='" + service.getServerURL() + "'");
-      final String fullURL = service.getServerURL() + imageURL.toString();
+      final String fullURL = service.getServerURL() + imageURL;
       Bitmap bitmap = GenericCache.getInstance().get(fullURL);
       if (bitmap == null) {
         CAASDataCallback<byte[]> callback = new CAASDataCallback<byte[]>() {

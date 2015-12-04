@@ -23,7 +23,10 @@ import com.ibm.caas.sdktest.util.GeneralUtils;
 import com.ibm.caas.sdktest.util.GenericCache;
 import com.ibm.caas.sdktest.util.Settings;
 
-import java.util.List;
+import static com.ibm.caas.CAASProperties.CATEGORIES;
+import static com.ibm.caas.CAASProperties.KEYWORDS;
+import static com.ibm.caas.CAASProperties.OID;
+import static com.ibm.caas.CAASProperties.TITLE;
 
 public class ContentTypesActivity extends ListActivity {
   private static final String LOG_TAG = ContentTypesActivity.class.getSimpleName();
@@ -53,8 +56,6 @@ public class ContentTypesActivity extends ListActivity {
     final String contentType = (String) adapter.getItem(position);
     final GenericCache cache = GenericCache.getInstance();
     cache.put(Constants.CONTENT_TYPE, contentType);
-    List<CAASContentItem> items = null;
-    boolean result = false;
     try {
       CAASService server = cache.get(Constants.SERVER);
       CAASDataCallback<CAASContentItemsList> callback = new CAASDataCallback<CAASContentItemsList>() {
@@ -76,7 +77,8 @@ public class ContentTypesActivity extends ListActivity {
       };
       CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
       request.setPath(Settings.macmLib + "/Content Types/" + contentType);
-      request.addProperties("id", "title", "categories", "keywords");
+      //request.addProperties("id", "title", "categories", "keywords");
+      request.addProperties(OID, TITLE, CATEGORIES, KEYWORDS);
       request.addElements("cover", "author", "publish_date", "isbn", "price");
       request.setPageNumber(1);
       request.setPageSize(10);

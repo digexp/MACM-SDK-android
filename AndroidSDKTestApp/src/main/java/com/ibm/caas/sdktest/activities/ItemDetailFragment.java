@@ -10,12 +10,13 @@ import android.widget.TextView;
 import com.ibm.caas.CAASContentItem;
 import com.ibm.caas.sdktest.R;
 
+import static com.ibm.caas.CAASProperties.*;
+
 /**
  * A fragment representing a single content item detail screen.
  * This fragment is either contained in a {@link ItemListActivity} in two-pane mode (on tablets) or a {@link ItemDetailActivity} on handsets.
  */
 public class ItemDetailFragment extends Fragment {
-  private static final String LOG_TAG = ItemDetailFragment.class.getSimpleName();
   /**
    * The fragment argument representing the item ID that this fragment represents.
    */
@@ -37,24 +38,22 @@ public class ItemDetailFragment extends Fragment {
     super.onCreate(savedInstanceState);
     if (getArguments().containsKey(ARG_ITEM_ID)) {
       item = (CAASContentItem) getArguments().get(ARG_ITEM_ID);
-      //Log.v(LOG_TAG, String.format("onCreate() : item = %s, id = %s", item, item.getOid()));
     }
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     rootView = (ViewGroup) inflater.inflate(R.layout.fragment_article_detail, container, false);
-    //Log.v(LOG_TAG, String.format("onCreateView() : item = %s, rootView = %s", item, rootView));
     rootView.findViewById(0);
     // update the text fields values
     if (item != null) {
-      setViewText(R.id.title_detail, "title");
+      setViewText(R.id.title_detail, TITLE);
       setViewText(R.id.author, "author");
-      setViewText(R.id.published, "publish_date");
+      setViewText(R.id.published, PUBLISH_DATE);
       setViewText(R.id.isbn, "isbn");
       setViewText(R.id.price, "price");
-      setViewText(R.id.categories, "categories");
-      setViewText(R.id.keywords, "keywords");
+      setViewText(R.id.categories, CATEGORIES);
+      setViewText(R.id.keywords, KEYWORDS);
     }
     return rootView;
   }
@@ -69,7 +68,6 @@ public class ItemDetailFragment extends Fragment {
     Object value = item.getElement(attribute);
     if (value == null) value = item.getProperty(attribute);
     if (value == null) value = "";
-    //Log.v(LOG_TAG, String.format("setViewText(resource=%d, attribute=%s) : view=%s, value=%s (%s)", resource, attribute, view, value, value.getClass().getSimpleName()));
     view.setText(value.toString());
   }
 }
