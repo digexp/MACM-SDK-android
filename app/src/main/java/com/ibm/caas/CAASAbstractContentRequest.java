@@ -65,6 +65,14 @@ abstract class CAASAbstractContentRequest<C> extends CAASRequest<C> {
 
   /**
    * Get the <code>path</code> of the content item(s) to retrieve.
+   * <p>The <code>path</code> parameter must match the path of a specific item, or match one of the following MACM system content item:
+   * <ul>
+   * <li><i>&lt;lib_name&gt;</i>/Views/All: lists all content items in the addressed library</li>
+   * <li>MACM System/Views/Open Projects: lists all projects that are in state active or pending</li>
+   * <li><i>&lt;lib_name&gt;</i>/Views/My Approvals: lists all content items in the current lib the current user can approve</li>
+   * <li><i>&lt;lib_name&gt;</i>/Content Types/<i>&lt;content_type_name&gt;</i>: lists all content items of the addressed type</li>
+   * </ul>
+   * <p>where <i>&lt;lib_name&gt;</i> is the name of the content library and <i>content_type_name</i> the name of the content type.
    * <p><b>See also</b>: <a href="http://www-01.ibm.com/support/knowledgecenter/SSYK7J_8.5.0/macm/macm_rest_api_sys_cont_items.dita">MACM path structure</a> in the IBM Knowledge Center for MACM.
    * @return the path string.
    */
@@ -74,7 +82,15 @@ abstract class CAASAbstractContentRequest<C> extends CAASRequest<C> {
 
   /**
    * Set the <code>path</code> of the content item(s) to retrieve.
-   * The <code>path</code> is mutually exclusive with the {@link #setOid(String) oid}, therefore this method resets the <code>oid</code> to <code>null</code>.
+   * <p>The <code>path</code> parameter must match the path of a specific item, or match one of the following MACM system content item:
+   * <ul>
+   * <li><i>&lt;lib_name&gt;</i>/Views/All: lists all content items in the addressed library</li>
+   * <li>MACM System/Views/Open Projects: lists all projects that are in state active or pending</li>
+   * <li><i>&lt;lib_name&gt;</i>/Views/My Approvals: lists all content items in the current lib the current user can approve</li>
+   * <li><i>&lt;lib_name&gt;</i>/Content Types/<i>&lt;content_type_name&gt;</i>: lists all content items of the addressed type</li>
+   * </ul>
+   * <p>where <i>&lt;lib_name&gt;</i> is the name of the content library and <i>content_type_name</i> the name of the content type.
+   * <p>The <code>path</code> is mutually exclusive with the {@link #setOid(String) oid}, therefore this method resets the <code>oid</code> to <code>null</code>.
    * <p><b>See also</b>: <a href="http://www-01.ibm.com/support/knowledgecenter/SSYK7J_8.5.0/macm/macm_rest_api_sys_cont_items.dita">MACM path structure</a> in the IBM Knowledge Center for MACM.
    * @param path the path string.
    */
