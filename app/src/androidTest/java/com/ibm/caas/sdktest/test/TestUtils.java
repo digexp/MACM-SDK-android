@@ -70,12 +70,11 @@ public class TestUtils {
   }
 
   public static CAASService createService() {
-    //return new CAASService("http://macm-mobile-nightly.rtp.raleigh.ibm.com:10039", "wps", "", "wpsadmin", "wpsadmin");
-    return new CAASService("http://macm-daily-us.rtp.raleigh.ibm.com:10039", "wps", "macm1", "wpsadmin", "wpsadmin");
+    return new CAASService("<your host name>:10039", "wps", "macm1", "<username>", "<password>");
   }
 
   public static CAASService createServiceHTTPS() {
-    return new CAASService("https://macm-daily-us.rtp.raleigh.ibm.com:10041", "wps", "macm1", "wpsadmin", "wpsadmin");
+    return new CAASService("<your host name>:10041", "wps", "macm1", "<username>", "<password>");
   }
 
   public static String getLibraryName() {
