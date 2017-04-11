@@ -117,7 +117,7 @@ CAASDataCallback<CAASContentItemsList> callback = new CAASDataCallback<CAASConte
 CAASContentItemsRequest request = new CAASContentItemsRequest(callback);
 request.setPath("Samples/Content Types/Book"); // path to "Book" content items
 // include the specified properties in the response
-request.addProperties(CAASProperties.OIS, CAASProperties.CONTENT_TYPE, CAASProperties.TITLE,
+request.addProperties(CAASProperties.OID, CAASProperties.CONTENT_TYPE, CAASProperties.TITLE,
   CAASProperties.LAST_MODIFIED_DATE, CAASProperties.CATEGORIES, CAASProperties.KEYWORDS);
 // request the url to the cover image
 request.addElements("cover");
@@ -207,6 +207,7 @@ CAASDataCallback<byte[]> callback = new CAASDataCallback<byte[]>() {
     String contentType = requestResult.getHttpURLConnection().getHeaderField("Content-Type");
     // if we have an image content type, build a Bitmap object from the raw data
     if ((contentType != null) && contentType.startsWith("image")) {
+      byte[] bytes = requestResult.getResult();
       Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
       BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
       imageView.setImageDrawable(drawable);
